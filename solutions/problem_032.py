@@ -1,0 +1,14 @@
+import utils
+import itertools
+
+# Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
+def compute():
+	def is_pandigital(a,b):
+		return sorted(utils.get_digits(a) + utils.get_digits(b) + utils.get_digits(a*b)) == range(1,10)
+	memo = set()
+	for (a,b,c,d,e) in itertools.product(range(1,10), repeat=5):
+		if is_pandigital(10*a+b, 100*c+10*d+e):
+			memo.add((10*a+b)*(100*c+10*d+e))
+		elif is_pandigital(a, 1000*b + 100*c + 10*d + e):
+			memo.add(a*(1000*b+100*c+10*d+e))
+	return sum(memo), "Sum of all pandigital products"

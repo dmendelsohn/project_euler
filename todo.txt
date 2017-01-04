@@ -1,0 +1,7 @@
+TODO:
+
+Backburner:
+Combined packaging for partial fractions, a*sqrt(b) + c fraction class
+Ngonal functions
+Partition function
+Skim solutions to see where generators might help
