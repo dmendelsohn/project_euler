@@ -91,3 +91,10 @@ Problem 090: 1217
 Problem 091: 14234
 Problem 092: 8581146
 Problem 093: 1258
+Problem 094: 518408346
+Problem 095: 14316
+Problem 096: 24702
+Problem 097: 8739992577
+Problem 098: 18769
+Problem 099: 709
+Problem 100: 756872327473

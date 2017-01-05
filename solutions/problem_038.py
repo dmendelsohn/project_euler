@@ -11,4 +11,4 @@ def compute():
 			return utils.make_number(digits, reverse=True)
 		else:
 			return 0
-	return max(get_pandigital_mult(i) for i in range(1,10**4)), ''
+	return max(get_pandigital_mult(i) for i in range(1,10**4)), 'Highest pandigital multiple'

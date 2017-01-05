@@ -16,6 +16,16 @@ def gcd(a, b):
 def nCr(n, r):
 	return reduce(operator.mul, range(n-r+1, n+1)) / reduce(operator.mul, range(1,r+1))
 
+def power_mod(a, b, m): # Find a^b mod m
+	if b == 0: # Base case
+		return 1
+	if b%2 == 0:
+		x = 1
+	else:
+		x = a # Handle extra factor of a
+	return (x*(power_mod(a, b/2, m)**2))%m
+
+
 def factorial(n):
 	f = 1
 	while n > 1:
@@ -56,6 +66,9 @@ def isqrt(n):  # Newton's method
         x = y
         y = (x + n // x) // 2
     return x
+
+def is_square(n):
+	return isqrt(n)**2 == n
 
 def make_number(digits, base=10, reverse=False): # Assume digits are in low->high order
 	if reverse:
@@ -115,15 +128,28 @@ def count_divisors(d):  # d is factorization dictionary
 def num_divisors(x):
 	return count_divisors(prime_factorize(x))
 
-def sum_divisors(n):
-	total = 1
+def sum_divisors(n): # Aka sigma(n)
+	total = 0
 	sqrt = isqrt(n)
-	for i in range(2, sqrt+1):
+	for i in range(1, sqrt+1):
 		if n%i==0:
 			total += i + n/i
 	if sqrt**2 == n:
 		total -= sqrt #handle perfect square case
 	return total
+
+def get_first_sigmas(n): # Returns [sigma(n) for i in range(n)], using sieve for efficiency
+	sigmas = [0 for i in range(n)]
+	for i in range(1, 1+isqrt(n-1)):
+		mul = i
+		prod = i*mul
+		while prod < n:
+			sigmas[prod] += (i+mul)
+			mul += 1
+			prod += i
+	for i in range(1, 1+isqrt(n-1)):
+		sigmas[i**2] -= i
+	return sigmas
 
 #cache is sorted list of lowest primes
 def is_prime(x, cache=[]):
