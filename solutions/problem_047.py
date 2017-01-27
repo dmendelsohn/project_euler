@@ -4,7 +4,7 @@ import utils
 def compute():
 	MAX = 10**6  # Find by trial and error
 	sieve = [0 for i in range(MAX)]  # Initialize array
-	for prime in utils.get_first_primes(MAX/(2*3*5)):  # Bigger prime factors won't help
+	for prime in utils.get_first_primes(MAX//(2*3*5)):  # Bigger prime factors won't help
 		mult = 1
 		while (prime*mult < MAX):
 			sieve[prime*mult] += 1

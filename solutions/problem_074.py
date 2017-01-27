@@ -1,12 +1,14 @@
 import utils
 
-# When we iteratively do (sum of factorial of digits), how many n < 10^6 yield a chain of exactly 60 non-repeating terms?
+# When we iteratively do (sum of factorial of digits), how many n < 10^6 yield 
+# a chain of exactly 60 non-repeating terms?
 def compute():
 	FACTS = utils.get_first_factorials(10)
-	MEMO = {1:1, 2:1, 145:1, 40585:1, 871:2, 45361:2, 872:2, 45362:2, 169:3, 363601:3, 1454:3} # Manually enumerate loops
+	MEMO = {1:1, 2:1, 145:1, 40585:1, 871:2, 45361:2, 
+			872:2, 45362:2, 169:3, 363601:3, 1454:3} # Manually enumerate loops
 	def iterate(x):
 		return sum([FACTS[d] for d in utils.get_digits(x)])
-	def update_chain(x):  # Assumes we will get to one of our manually entered loops
+	def update_chain(x):  # Assumes we will get to an existing loop
 		chain = []
 		while x not in MEMO:
 			chain.append(x)

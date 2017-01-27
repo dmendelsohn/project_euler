@@ -2,7 +2,7 @@
 def compute():
 	MEMO = [1] # By definition, p(0)=1
 	def pentagonal(k):
-		return k*(3*k-1)/2
+		return k*(3*k-1)//2
 	def p(n):  # Partition function, calculated using recurrence relation I found on Wikipedia
 		count = 0
 		k = 1

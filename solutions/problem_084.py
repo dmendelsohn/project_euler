@@ -36,7 +36,7 @@ def compute():
 	def get_roll(n): # 2 dice, n sides per die
 		return (random.randint(1,n), random.randint(1,n))
 	freq = [0]*40  # Frequency counter
-	ch_cards, cc_cards = range(16), range(16)
+	ch_cards, cc_cards = list(range(16)), list(range(16))
 	random.shuffle(ch_cards)
 	random.shuffle(cc_cards)
 	ch_index, cc_index = 0, 0

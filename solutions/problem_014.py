@@ -11,5 +11,5 @@ def compute():
 		else:
 			MEMO[n] = 1+collatz(3*n+1)
 		return MEMO[n]
-	length, start = reduce(max, [(collatz(i), i) for i in range(1, 10**6+1)])
+	length, start = max((collatz(i), i) for i in range(1, 10**6+1))
 	return start , "The number under one million that produces longest Collatz chain (%d)" % (length,)

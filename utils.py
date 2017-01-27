@@ -2,6 +2,7 @@ import math
 import operator
 import collections
 import itertools
+from functools import reduce
 
 INPUT_PATH = 'inputs/'
 
@@ -14,7 +15,7 @@ def gcd(a, b):
 	return a
 
 def nCr(n, r):
-	return reduce(operator.mul, range(n-r+1, n+1)) / reduce(operator.mul, range(1,r+1))
+	return reduce(operator.mul, range(n-r+1, n+1)) // reduce(operator.mul, range(1,r+1))
 
 def power_mod(a, b, m): # Find a^b mod m
 	if b == 0: # Base case
@@ -23,7 +24,7 @@ def power_mod(a, b, m): # Find a^b mod m
 		x = 1
 	else:
 		x = a # Handle extra factor of a
-	return (x*(power_mod(a, b/2, m)**2))%m
+	return (x*(power_mod(a, b//2, m)**2))%m
 
 
 def factorial(n):
@@ -41,7 +42,7 @@ def get_first_factorials(max_num):
 def simplify_frac(a, b=None):
 	if b: # They gave numerator and denom separately
 		g = gcd(a, b)
-		return a/g, b/g
+		return a//g, b//g
 	return simplify_frac(a[0], a[1]) # They gave it as a tuple
 
 def frac_lt(a, b):  # a and b are both (num,den) fractions
@@ -83,7 +84,7 @@ def get_digits(x, base=10, reverse=False): # Returns list of digits, starting wi
 	digits = []
 	while x > 0:
 		digits.append(x%base)
-		x /= base
+		x //= base
 	if reverse:
 		digits.reverse()
 	return tuple(digits)
@@ -97,7 +98,7 @@ def sum_of_digits(x, base=10):  # This way I won't have to make a list every tim
 	total = 0
 	while x > 0:
 		total += x%base
-		x /= base
+		x //= base
 	return total
 
 def is_palindrome(x, base=10):
@@ -112,14 +113,14 @@ def prime_factorize(x): # Returns dict of factors to multiplicty
 	while i <= isqrt(x):
 		if x%i == 0:
 			d[i] = d.get(i,0)+1
-			x /= i
+			x //= i
 		else:
 			i += 1
 	d[x] = d.get(x,0)+1 # Leftover x is prime
 	return d
 
 def multiply_factorizations(a, b):
-	primes = set(a.keys() + b.keys())
+	primes = set(a.keys()).union(set(b.keys()))
 	return {p: a.get(p, 0) + b.get(p, 0) for p in primes}
 
 def count_divisors(d):  # d is factorization dictionary
@@ -133,7 +134,7 @@ def sum_divisors(n): # Aka sigma(n)
 	sqrt = isqrt(n)
 	for i in range(1, sqrt+1):
 		if n%i==0:
-			total += i + n/i
+			total += i + n//i
 	if sqrt**2 == n:
 		total -= sqrt #handle perfect square case
 	return total
@@ -194,10 +195,9 @@ def get_first_totients(max_num):  # returns list, including zero element (let's 
 	results = [(1, 1)]*max_num
 	for p in primes:
 		x = p
-		mult = 1-1.0/p
 		for i in range(p, max_num, p):  # All multiples of p
 			results[i] = simplify_frac(results[i][0]*(p-1), results[i][1]*p)
-	return [0] + [i*results[i][0]/results[i][1] for i in range(1, len(results))]
+	return [0] + [i*results[i][0]//results[i][1] for i in range(1, len(results))]
 
 def get_first_num_divisors(max_num): # returns list, including zero element, (let's say 0 and 1 have 1 divisor)
 	sieve = [2 if i > 1 else 1 for i in range(max_num)]  # Already count 1 themselves and 1
@@ -214,7 +214,7 @@ def get_permutation(items, index):
 	result = []
 	while unused:
 		n = len(unused)-1
-		next_item = unused.pop(index/factorial[n])
+		next_item = unused.pop(index // factorial[n])
 		result.append(next_item)
 		index %= factorial[n]
 	return result
@@ -223,7 +223,7 @@ def get_num_permutations(l):
     num = math.factorial(len(l))
     mults = collections.Counter(l).values()
     den = reduce(operator.mul, (math.factorial(v) for v in mults), 1)
-    return num / den
+    return num // den
 
 def powerset(iterable):
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
@@ -235,7 +235,7 @@ def get_vocab(): # Will work for most unix systems
 	return {w: None for w in words}
 
 def load_grid(filename, delim):
-	return [map(int, row.strip().split(delim)) for row in open(filename).read().strip().split('\n')]
+	return [list(map(int, row.strip().split(delim))) for row in open(filename).read().strip().split('\n')]
 
 # Often the format required for submissions
 def concatenate_ints(iterable):

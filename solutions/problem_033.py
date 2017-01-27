@@ -1,9 +1,14 @@
 import utils
 import itertools
 
-# Find denominiator of product of digit cancelling fractions
+
+# Find denominator of product of digit cancelling fractions
 def compute():
+	# a/b, c/d are digit cancelling if 9*a*c + b*c == 10*a*b; specify a < c to avoid duplicates
 	results = [(a,b,c) for (a,b,c) in itertools.product(range(1,10),repeat=3) if 9*a*c + b*c == 10*a*b and a < c]
-	frac = reduce(lambda (n,d),(a,b,c): (n*(10*a+b), d*(10*b+c)), results, (1,1))
-	a = utils.simplify_frac(frac)[1]
-	return a, "The denominator of the product of the digit cancelling fractions"
+	numer, denom = (1,1)
+	for (a,b,c) in results:
+		numer *= (10*a + b)
+		denom *= (10*b + c)
+	answer = utils.simplify_frac((numer, denom))[1]
+	return answer, "The denominator of the product of the digit cancelling fractions"

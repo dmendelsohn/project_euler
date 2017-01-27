@@ -8,11 +8,11 @@ def compute():
 		if n >= 10 and n < 20:  # Handle 'teens' edge case first
 			return teens[n-10]
 		elif n < 100:
-			return tens[n/10] + ones[n%10]
+			return tens[n//10] + ones[n%10]
 		elif n == 1000:
 			return ONE_THOUSAND
 		else:
-			count = ones[n/100] + HUNDRED
+			count = ones[n//100] + HUNDRED
 			if n%100 != 0:
 				count += num_letters(n%100) + AND
 			return count

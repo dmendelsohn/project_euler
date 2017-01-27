@@ -6,9 +6,12 @@ def compute(verbose=False):
 	def is_valid_message(text, vocab):
 		valid_words = [(word in vocab) for word in text.split(' ')]
 		return valid_words.count(True) > valid_words.count(False) # True outnumber False 3:1 or better
+
 	def is_valid_char(x): # Char is taken as int
 		return x in [9, 10, 13] or 32 <= x < 127
-	ctext = map(int, open(utils.INPUT_PATH + 'p059_cipher.txt', 'rt').read().strip().split(','))
+
+	ctext = open(utils.INPUT_PATH + 'p059_cipher.txt').read().strip().split(',')
+	ctext = list(map(int, ctext))  # Map cipher text to list of ascii values
 	N = 3 # Key length
 	possible_keys = [range(128)]*N
 	for i in range(N): # For each character in key

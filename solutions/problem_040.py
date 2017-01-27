@@ -1,5 +1,6 @@
 import utils
 import operator
+from functools import reduce
 
 # Compute d_1 x d_10 x d_100 x d_1000 x d_10000 x d_100000 x d_1000000 (see problem definition)
 def compute():

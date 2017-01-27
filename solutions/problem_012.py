@@ -9,6 +9,6 @@ def compute():
 		prod_fact = utils.multiply_factorizations(fact, next_fact)
 		prod_fact[2] -= 1 # Divide by 2
 		if (utils.count_divisors(prod_fact) > 500):
-			return n*(n+1)/2, "First triangle number with over 500 divisors"
+			return n*(n+1)//2, "First triangle number with over 500 divisors"
 		n += 1
 		fact = next_fact

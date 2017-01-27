@@ -6,7 +6,7 @@ def compute():
 	MODS = [2, 3, 5, 7, 11, 13, 17]
 	def has_property(x): #assumes 0-9 pandigital
 		for i in range(len(MODS)):
-			if ((x/10**(6-i))%1000)%MODS[i] != 0:
+			if ((x//10**(6-i))%1000)%MODS[i] != 0:
 				return False
 		return True
 	perms = [utils.make_number(d) for d in itertools.permutations(range(10), 10)]

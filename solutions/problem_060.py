@@ -32,7 +32,7 @@ def compute(verbose=False):
 	cliques = {i: set() for i in range(2,6)} # 2-cliques just edges
 	if verbose:
 		n, m = len(primes[0]),len(primes[1])
-		poss_edges = (n**2-n + m**2 - m)/2
+		poss_edges = (n**2-n + m**2 - m)//2
 		print("There are %d possible edges" % (poss_edges,))
 	count = 0
 	for i in range(2):

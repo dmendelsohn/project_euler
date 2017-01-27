@@ -10,7 +10,7 @@ def compute():
 		elif x%3 != 2:
 			return 1
 		else:
-			return 2*(1+x/3)
+			return 2*(1+x//3)
 	N = 100
 	frac = None
 	for i in range(N-1, -1, -1):

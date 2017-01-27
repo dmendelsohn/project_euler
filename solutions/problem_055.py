@@ -10,4 +10,4 @@ def compute():
 			if utils.is_palindrome(x):
 				return False
 		return True
-	return len(filter(is_lychrel, range(1,10**4))), 'Number of Lychrel numbers below 10^4'
+	return sum(map(is_lychrel, range(1,10**4))), 'Number of Lychrel numbers below 10^4'

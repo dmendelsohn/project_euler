@@ -9,4 +9,4 @@ def compute():
 			if not utils.make_number(digits[i:]+digits[:i]) in PRIMES:
 				return False
 		return True
-	return len(filter(is_circular_prime, PRIMES)), 'Number of circular primes below one million'
+	return sum(map(is_circular_prime, PRIMES)), "Number of circular primes below one million"

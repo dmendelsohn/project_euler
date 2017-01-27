@@ -6,4 +6,4 @@ def compute():
 		return sum(ord(c)-64 for c in word)
 	tri_nums = {n*(n+1)/2 for n in range(1,100)}
 	words = open(utils.INPUT_PATH + "p042_words.txt").read().replace("\"","").split(",")
-	return len(filter(lambda w: word_score(w) in tri_nums, words)), "Number of triangle words"
+	return sum(word_score(w) in tri_nums for w in words), "Number of triangle words"

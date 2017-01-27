@@ -4,8 +4,9 @@ import utils
 def compute():
 	MAX_DEN = 12000
 	count = 0
-	for d in range(2,MAX_DEN+1):
-		for n in range(1+(d/3),(d+1)/2):  # These enforce the bounds
-			if utils.gcd(d,n) == 1: # Check if n/d is proper
+	for den in range(2,MAX_DEN+1):
+		for num in range(1 + (den//3), (den+1) // 2):  # These enforce the bounds
+			if utils.gcd(den, num) == 1: # Check if n/d is proper
 				count += 1
-	return count, "Number of unique proper fractions between 1/3 and 1/2 with denominators <= %d" % (MAX_DEN,)
+	text = "Number of proper fractions between 1/3 and 1/2 with denominators <= %d" % (MAX_DEN,)
+	return count, text

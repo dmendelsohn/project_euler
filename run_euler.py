@@ -48,8 +48,10 @@ def format_result(prob_num, result, exp_answer): # n is int, result is (numeric 
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
-		verbose = reduce(operator.or_, map(lambda arg: 'verbose' in arg, sys.argv)) # If 'verbose' in any arg
-		sys.argv = filter(lambda arg: 'verbose' not in arg, sys.argv)  # Remove any 'verbose' args
+		verbose = False
+		for arg in sys.argv: # verbose is true if any arg contains 'verbose'`
+			verbose = (verbose or ('verbose' in arg))
+		sys.argv = list(filter(lambda arg: 'verbose' not in arg, sys.argv))  # Remove any 'verbose' args
 		answers = get_answers()
 		t_start = dt.now()
 		computed_answers = {}

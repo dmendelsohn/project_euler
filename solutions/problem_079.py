@@ -2,6 +2,6 @@ import utils
 
 # Find shortest possible passcode
 def compute():
-	logins = open(utils.INPUT_PATH + 'p079_keylog.txt').read().strip().split('\n') # May as well keep it as text
-	answer = 73162890 # Solved by hand, easy since it was possible with just one instance of each digit
+	# See 'p079_keylog.txt' for logins
+	answer = 73162890 # Solved by hand
 	return answer, "Shortest possible password"

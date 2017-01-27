@@ -10,11 +10,12 @@ def compute():
 			inc += n-2
 			num += inc
 		POLY[n] = ngonals
+
 	def get_next(possible_n, start_digits=None, end_digits=None):
 		results = []
 		for n in possible_n:
 			for num in POLY[n]:
-				if start_digits != None and num/100 != start_digits:
+				if start_digits != None and num//100 != start_digits:
 					continue  # This number is out
 				if end_digits != None and num%100 != end_digits:
 					continue # This number is out
@@ -27,7 +28,7 @@ def compute():
 		if len(list_so_far) > 0:
 			start_digits = list_so_far[-1]%100
 		if len(remaining_n) == 1:
-			end_digits = list_so_far[0]/100 # Make sure it wraps around 
+			end_digits = list_so_far[0]//100 # Make sure it wraps around 
 		next_moves = get_next(remaining_n, start_digits, end_digits)
 		for (num, n) in next_moves:
 			remaining_n.remove(n)
@@ -36,4 +37,5 @@ def compute():
 				return x # We're done!
 			remaining_n.add(n)
 		return 0 # No solution found
+
 	return get_sols([],set(range(3,9))), "The sum of the first solution set"
