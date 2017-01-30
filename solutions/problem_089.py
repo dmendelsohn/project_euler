@@ -4,7 +4,8 @@ import utils
 def compute():
 	VALUES = {'I':1, 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000}
 	def to_roman(n): # Outputs minimal roman numeral representation, as string
-		def to_roman_digit(digit, (sym1, sym5, sym10)):  # Outputs a single roman numeral digit (0-9)
+		def to_roman_digit(digit, symbol_set):  # Outputs a single roman numeral digit (0-9)
+			(sym1, sym5, sym10) = symbol_set
 			if digit == 0:
 				return ''
 			elif digit <= 3:
@@ -15,11 +16,12 @@ def compute():
 				return sym5 + sym1 * (digit-5)
 			else: # digit == 9:
 				return sym1 + sym10
-		symbol_sets = [('I','V','X'), ('X','L','C'), ('C','D','M')]  # index i is symbol set to translate 10**i place
-		roman = 'M' * (n/1000)  # However many Ms are required
+		# Index i is symbol set to translate 10**i place
+		symbol_sets = [('I','V','X'), ('X','L','C'), ('C','D','M')]
+		roman = 'M' * (n//1000)  # However many Ms are required
 		for i in range(2, -1, -1): # process 10**i place
 			n %= 10**(i+1)
-			roman += to_roman_digit(n/10**i, symbol_sets[i])
+			roman += to_roman_digit(n//10**i, symbol_sets[i])
 		return roman
 	def from_roman(r): # Interpret valid (but not necessarily minimal) roman numeral string
 		if len(r) == 0:  # Base case for recursive solution

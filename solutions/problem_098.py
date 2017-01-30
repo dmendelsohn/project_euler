@@ -3,13 +3,15 @@ import utils
 
 # Compute largest square formed by an anagramic pair
 def compute():  # We generally treat words as list of ints 0...25
-	def get_frequency_dist(word):  # Return tuple of 26 elements, representing the counts of a...z respectively
+	# Return tuple of 26 elements, representing the counts of a...z respectively
+	def get_frequency_dist(word):
 		count = [0]*26
 		for c in word:
 			count[c] += 1
 		return tuple(count)
 
-	def get_anagrams(words):  # Returns a dict mapping a frequency distibution to list of words with that distribution
+	# Returns a dict mapping a frequency distribution to list of words with that distribution
+	def get_anagrams(words):
 		anagrams = {}
 		for w in words:
 			dist = get_frequency_dist(w)
@@ -34,25 +36,29 @@ def compute():  # We generally treat words as list of ints 0...25
 		return mapping
 
 	def apply_mapping(word, mapping):
-		digits = map(lambda letter: mapping[letter], word)
+		digits = list(map(lambda letter: mapping[letter], word))
 		return utils.make_number(digits, reverse=True)
 
 	# Return highest square in an a-b anagram pair, or 0 if a and b cannot be an anagram pair
-	def best_anagram_square(a, b, squares): # assume a and b are anagrams and all squares are right number of digits
+	# Assume word1 and word2 are anagrams and all squares are correct number of digits
+	def best_anagram_square(word1, word2, squares):
 		best = 0
 		for sq in squares:
-			mapping = get_mapping(a, sq)
+			mapping = get_mapping(word1, sq)
 			if mapping: # If there is a valid mapping
-				num = apply_mapping(b, mapping) 
+				num = apply_mapping(word2, mapping) 
 				if num in squares:
 					best = max(best, sq, num)
 		return best
 
 	words = open(utils.INPUT_PATH + 'p098_words.txt').read().split(',')
 	words = map(lambda s: s.strip('\"'), words)  # Strip quotation marks
-	words = [map(lambda c: ord(c) - ord('A'), w) for w in words]  # Make each word a list of integers, 0 for A, 25 for Z
+	# Make each word a list of integers, 0 for A, 25 for Z
+	words = [list(map(lambda c: ord(c) - ord('A'), w)) for w in words]
 	anagrams = get_anagrams(words)
-	anagrams = {dist:anagrams[dist] for dist in anagrams if len(anagrams[dist]) > 1}  # Filter out anagrams sets of 1
+
+	# FIlter out anagram sets of 1 element
+	anagrams = {dist:anagrams[dist] for dist in anagrams if len(anagrams[dist]) > 1}
 
 	# Make dict mapping integer lengths to set of squares of that length
 	max_length = max(map(sum, anagrams.keys()))

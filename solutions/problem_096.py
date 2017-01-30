@@ -19,7 +19,8 @@ def compute():
 		return [(r+rd,c+cd) for (rd,cd) in itertools.product(range(3),repeat=2)]
 	def possible_moves(puzzle): # Returns grid, where each element is set of allowed digits
 		grid = {(r,c):set(range(1,10)) for (r,c) in itertools.product(range(9),repeat=2)}
-		for (r,c) in itertools.product(range(9),repeat=2): # For each spot in the puzzle, constrain all related spots
+		# For eah spot in the puzzle, constrain all related spots
+		for (r,c) in itertools.product(range(9),repeat=2):
 			val = puzzle[(r,c)]
 			if val == 0: # This is an empty square and doesn't constrain other squares
 				continue # So we do nothing
@@ -29,7 +30,8 @@ def compute():
 				grid[loc].discard(val)
 		return grid
 
-	def possible_moves_by_loc(puzzle, (r,c)):  # Returns set of possible moves for a single location
+	def possible_moves_by_loc(puzzle, loc):  # Returns set of possible moves for a single location
+		(r,c) = loc
 		if puzzle[(r,c)] != 0:
 			return set() # This space is already filled in, no possible moves
 		possible = set(range(1,10))
@@ -37,24 +39,27 @@ def compute():
 			possible.discard(puzzle[loc])
 		return possible
 
-	def apply_deduced_moves(puzzle, possible_moves): # If any square has only one possiblity, fill it in, return number of moves made
+	# If any square has only one possibility, fill it in, return number of moves made
+	def apply_deduced_moves(puzzle, possible_moves):
 		count = 0
 		for loc in possible_moves: # dictionary with (r,c) keys and set values
 			if len(possible_moves[loc]) == 1:
 				puzzle[loc] = list(possible_moves[loc])[0]
 
 	# Figure out if any number only has one possible placement in the group
-	def apply_group_deduction(puzzle, group, possible_moves): # Group is list of locations (could be row, col or box)
+	def apply_group_deduction(puzzle, group, possible_moves): 
+		# Group is list of locations (could be row, col or box)
 		for i in range(9):  # For each digit 1-9
 			possible_placements = [loc for loc in group if i in possible_moves[loc]]
 			if len(possible_placements) == 1:  # If the digit can only go in one place
 				puzzle[possible_placements[0]] = i # place it
 
-	def backtrack(puzzle, loc_index=-1): # Solve puzzle via backtracking, in recursive calls, specify loc_index.  Return True if successful
+	# Solve via backtracking, in recursive calls, specify loc_index. Return True if successful
+	def backtrack(puzzle, loc_index=-1):
 		loc_index += 1
 		if loc_index == 9*9: # We got to the end and filled everything in!  We're done
 			return True
-		loc = (loc_index/9, loc_index%9)  # loc_index is index in flattened grid
+		loc = (loc_index//9, loc_index%9)  # loc_index is index in flattened grid
 		if puzzle[loc] != 0:
 			return backtrack(puzzle, loc_index)  # Just keep going
 		possible = possible_moves_by_loc(puzzle, loc)
@@ -79,7 +84,8 @@ def compute():
 			for loc in itertools.product(range(0,9,3),repeat=2):
 				groups.append(get_box_locs(loc))
 			for g in groups:
-				apply_group_deduction(puzzle, g, possible)  # If a number can only go in one place in a group, place it
+				# If a number can only go in one place in a group, place it
+				apply_group_deduction(puzzle, g, possible)
 		backtrack(puzzle)  # Finish the rest of the puzzle via brute-force backtracking
 		return puzzle
 
@@ -88,7 +94,9 @@ def compute():
 		text = open('inputs/p096_sudoku.txt').read().split('\n')
 		for i in range(50):
 			subtext = text[10*i+1:10*i+10]
-			puzzles[i] = {(r,c): int(subtext[r][c]) for (r,c) in itertools.product(range(9),repeat=2)}
+			puzzles[i] = {}
+			for (r,c) in itertools.product(range(9), repeat=2):
+				puzzles[i][(r,c)] = int(subtext[r][c])
 		return puzzles
 	puzzles = parse_input()
 	puzzles = map(solve_sudoku, puzzles)

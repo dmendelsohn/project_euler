@@ -5,10 +5,11 @@ def compute():
 	# Observation: letting x=2t-1 and y=2b-1 (t for 'total' and b for 'blue'),
 	# we need to solve x^2 - 2y^2 = -1.  I found on the internet that we get all solutions
 	# by solvin x_n + y_n * sqrt(2) = (1+sqrt(2))^(2n-1)
-	def multiply(a, b): # Return multiply (a + bsqrt(2)) * (1+sqrt(2)), return (x,y) where result was x+ysqrt(2)
+	# Muliiply (a + bsqrt(2)) * (1 + sqrt(2)), return (x,y) where result was x+ysqrt(2)
+	def multiply(a, b):
 		return (a+2*b, a+b)
 	a, b = 1, 1
 	while a < 2*10**12:
 		a, b = multiply(a,b)
 		a, b = multiply(a,b)
-	return (b+1)/2, 'Number of blue disks (total is %d)' % ((a+1)/2,)
+	return (b+1)//2, 'Number of blue disks (total is %d)' % ((a+1)//2,)
