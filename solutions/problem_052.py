@@ -1,7 +1,7 @@
 import utils
 
 # Smallest number where x, 2x, 3x, 4x, 5x, 6x all have same digits
-def compute():
+def compute(verbose=False):
 	def fits_criteria(x):
 		MAX_MULT = 6
 		if utils.num_digits(x) != utils.num_digits(MAX_MULT*x):

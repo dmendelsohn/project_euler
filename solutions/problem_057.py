@@ -2,7 +2,7 @@ from fractions import Fraction
 import utils
 
 # How many of first 1000 approximate fractional expansions of sqrt(2) have more digits in num than denom
-def compute():
+def compute(verbose=False):
 	frac = Fraction(1)
 	count = 0
 	for i in range(1000):

@@ -1,7 +1,7 @@
 import utils
 
 # How many circular primes are there below one million?
-def compute():
+def compute(verbose=False):
 	PRIMES = utils.get_first_primes(10**6, as_set=True)
 	def is_circular_prime(x):
 		digits = utils.get_digits(x)

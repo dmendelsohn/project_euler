@@ -1,5 +1,5 @@
 # Smallest n for which p(n) is divisible by one million (p is partition function)
-def compute():
+def compute(verbose=False):
 	MEMO = [1] # By definition, p(0)=1
 	def pentagonal(k):
 		return k*(3*k-1)//2

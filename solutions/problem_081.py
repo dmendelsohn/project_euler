@@ -1,7 +1,7 @@
 import utils
 
 # Smallest sum path through matrix
-def compute():
+def compute(verbose=False):
 	MEMO = {}
 	text_lines = open(utils.INPUT_PATH + 'p081_matrix.txt').read().strip().split('\n')
 	MATRIX = [list(map(int, line.split(','))) for line in text_lines]

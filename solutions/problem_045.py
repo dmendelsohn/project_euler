@@ -1,5 +1,5 @@
 # Find the smallest tri/pent/hex number > T285 = P165 = H143 = 40755.
-def compute():
+def compute(verbose=False):
 	MAX = 10**5  # Trial and error to reduce this
 	MEMO = {} # Maps number to 1,2,3 (count of how many of tri/pent/hex it is)
 	for n in range(1, MAX):

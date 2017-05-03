@@ -2,7 +2,7 @@ import search
 import utils
 
 # Another minimum path cost problem through a matrix, movement right, up, down is allowed
-def compute(): # Strategy: add 'start' and 'end' states to each side, other states will all be (r,c) tuples
+def compute(verbose=False): # Strategy: add 'start' and 'end' states to each side, other states will all be (r,c) tuples
 	text_lines = open(utils.INPUT_PATH + 'p082_matrix.txt').read().strip().split('\n')
 	MATRIX = [list(map(int, l.split(','))) for l in text_lines]
 	N = len(MATRIX)

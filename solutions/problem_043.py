@@ -2,7 +2,7 @@ import itertools
 import utils
 
 # Find the sum of all 0 to 9 pandigital numbers with this property. (See description)
-def compute():
+def compute(verbose=False):
 	MODS = [2, 3, 5, 7, 11, 13, 17]
 	def has_property(x): #assumes 0-9 pandigital
 		for i in range(len(MODS)):

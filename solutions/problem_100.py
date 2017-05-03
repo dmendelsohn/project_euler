@@ -1,7 +1,7 @@
 # Box has red disks and blue disks.  Certain distributions give us a 1/2 chance of drawing
 # two blues in a row without replacement.  What is the number of blue balls in the first such
 # distribution with over one trillion disks total?
-def compute():
+def compute(verbose=False):
 	# Observation: letting x=2t-1 and y=2b-1 (t for 'total' and b for 'blue'),
 	# we need to solve x^2 - 2y^2 = -1.  I found on the internet that we get all solutions
 	# by solvin x_n + y_n * sqrt(2) = (1+sqrt(2))^(2n-1)

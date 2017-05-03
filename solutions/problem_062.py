@@ -1,7 +1,7 @@
 import utils
 
 # Find the smallest cube for which exactly five permutations of its digits are cube.
-def compute():
+def compute(verbose=False):
 	MAX_BASE = 10**4
 	MEMO = {} # Keys: tuple of digits from lowest to highest
 	cubes = [x**3 for x in range(MAX_BASE)]

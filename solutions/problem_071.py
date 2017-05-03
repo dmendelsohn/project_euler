@@ -2,7 +2,7 @@ import utils
 from fractions import Fraction
 
 # Get the highest proper fraction with d <= 10^6 that's strictly less than 3/7
-def compute():
+def compute(verbose=False):
 	REF = Fraction(3,7)
 	MAX_DEN = 10**6
 	max_so_far = Fraction(0)

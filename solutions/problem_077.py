@@ -1,7 +1,7 @@
 import utils
 
 # What is first value that can be written as sum of primes in > 5000 different ways?
-def compute():
+def compute(verbose=False):
 	MEMO = {}
 	MAX = 10**3
 	PRIMES = utils.get_first_primes(MAX, as_set=False)

@@ -5,7 +5,7 @@ from functools import reduce
 
 # Find sum of minimal product-sum numbers for 2<=k<=12000
 # Slow-ish (10s)
-def compute():
+def compute(verbose=False):
 	# Returns list of sorted tuples that fit constraints, numbers must  be ints > 0
 	def get_multisets(max_sum, max_prod, max_elt, num_elts):
 		if num_elts == 0: # We're done!

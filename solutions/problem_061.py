@@ -1,5 +1,5 @@
 # Find cyclic sequence of 6 4-digit numbers, including each of polygonal numbers from 3-8
-def compute():
+def compute(verbose=False):
 	POLY = {}
 	for n in range(3,9):
 		ngonals = set()

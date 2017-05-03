@@ -2,7 +2,7 @@ import utils
 
 # Find the value of n, 1 < n < 10^7, for which phi(n) is a permutation of n and the ratio n/phi(n) produces a minimum.
 # Warning: This takes a while (100s)
-def compute():
+def compute(verbose=False):
 	def is_permutation(x,y): # Determine if x and y have digits that are permutations of one another
 		return utils.get_sorted_digits(x) == utils.get_sorted_digits(y)
 	MAX = 10**7

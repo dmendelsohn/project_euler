@@ -2,7 +2,7 @@ import utils
 from functools import reduce
 
 # Find the largest palindrome made from the product of two 3-digit numbers.
-def compute():
+def compute(verbose=False):
 	def check_palindrome(arr):
 		if len(arr) < 2:
 			return True

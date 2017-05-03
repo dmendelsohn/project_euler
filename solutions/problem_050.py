@@ -1,7 +1,7 @@
 import utils
 
 # Which prime, below one-million, can be written as the sum of the most consecutive primes?
-def compute():
+def compute(verbose=False):
 	primes = utils.get_first_primes(10**6)
 	d = set(primes)
 	best = 0

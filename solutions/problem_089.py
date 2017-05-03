@@ -1,7 +1,7 @@
 import utils
 
 # How many digits can we save by writing the given Roman numerals in minimal form
-def compute():
+def compute(verbose=False):
 	VALUES = {'I':1, 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000}
 	def to_roman(n): # Outputs minimal roman numeral representation, as string
 		def to_roman_digit(digit, symbol_set):  # Outputs a single roman numeral digit (0-9)

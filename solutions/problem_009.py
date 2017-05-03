@@ -1,5 +1,5 @@
 # Print a*b*c where a,b,c are a Pythagorean triple with sum 1000
-def compute():
+def compute(verbose=False):
 	for m in range(15,24):
 		for n in range(1, m):
 			if 2*m*(m+n) == 1000:

@@ -2,7 +2,7 @@ import math
 import utils
 
 # How many of the triangles contain the origin?
-def compute():
+def compute(verbose=False):
 	ABC = [-340, 495, -153,-910, 835, -947]
 	XYZ = [-175,41, -421,-714, 574,-645]
 	# Gets list of 'arcs' between vectors to points in triangle, in radians

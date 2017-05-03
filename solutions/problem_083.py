@@ -2,7 +2,7 @@ import search
 import utils
 
 # Another minimum path cost problem through a matrix, all directions are allowed
-def compute():  # Straight up dijkstra (astar with no heuristic)
+def compute(verbose=False):  # Straight up dijkstra (astar with no heuristic)
 	text_lines = open(utils.INPUT_PATH + 'p083_matrix.txt').read().strip().split('\n')
 	MATRIX = [list(map(int, line.split(','))) for line in text_lines]
 	N = len(MATRIX)

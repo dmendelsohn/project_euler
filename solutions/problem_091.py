@@ -3,7 +3,7 @@ import utils
 
 # Integer points (x1, y1), (x2, y2); 0 <= x1, y1, x2, y2 <= 50,
 # how many right triangles can be formed (together with (0,0))
-def compute():
+def compute(verbose=False):
 	# Count right triangles with right angle at (x,y), where x,y > 0 and another vertex at (0,0)
 	def count_sols(x,y):
 		(num, den) = utils.simplify_frac(y,x) # Simplified slope m

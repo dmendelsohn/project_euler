@@ -2,7 +2,7 @@ import utils
 
 # When we iteratively do (sum of factorial of digits), how many n < 10^6 yield 
 # a chain of exactly 60 non-repeating terms?
-def compute():
+def compute(verbose=False):
 	FACTS = utils.get_first_factorials(10)
 	MEMO = {1:1, 2:1, 145:1, 40585:1, 871:2, 45361:2, 
 			872:2, 45362:2, 169:3, 363601:3, 1454:3} # Manually enumerate loops

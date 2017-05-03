@@ -3,7 +3,7 @@ import utils
 
 # Compute sum of digits of numerator of 100th convergent in continued fraction for e
 # Sequence is [2; 1 2 1  1 4 1  1 6 1 ... 1 2k 1 ...]
-def compute():
+def compute(verbose=False):
 	def seq(x):
 		if x == 0:
 			return 2

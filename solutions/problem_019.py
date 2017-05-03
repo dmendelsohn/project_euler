@@ -1,5 +1,5 @@
 # How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
-def compute(): #note jan 1 1901 was a Tuesday, so date%7==5 is required
+def compute(verbose=False): #note jan 1 1901 was a Tuesday, so date%7==5 is required
 	four_years = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]*4
 	four_years[37] = 29  # Leap day
 	sundays, date = 0, 2 # First of Jan 1 1901 is Tuesday, which is date #2 (Sunday is 0)

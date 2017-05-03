@@ -1,7 +1,7 @@
 import utils
 
 # What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
-def compute():
+def compute(verbose=False):
 	lcm = {}  # Lcm will keep track of how many times we need each prime
 	for n in range(1, 21):
 		fact = utils.prime_factorize(n)

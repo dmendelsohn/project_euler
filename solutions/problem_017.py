@@ -1,5 +1,5 @@
 # How many letters to write out 1 through 1000?
-def compute():
+def compute(verbose=False):
 	def num_letters(n):  # Only works 1...1000
 		HUNDRED, AND, ONE_THOUSAND = 7, 3, 11
 		ones = [0, 3, 3, 5, 4, 4, 3, 5, 5, 4] # Number of letters in one, two, ...

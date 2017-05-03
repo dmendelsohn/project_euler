@@ -3,7 +3,7 @@ import utils
 from functools import reduce
 
 # Compute how many N < 10^4 have odd-length cycles in partial fraction approx. sequence
-def compute():
+def compute(verbose=False):
 	def rationalize(num, tup):  # Takes in fraction of form num / (a*sqrt(b)+c); tup = (a,b,c)
 		(a, b, c) = tup
 		num = (num*a, b, -num*c)

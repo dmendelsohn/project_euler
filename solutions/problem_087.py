@@ -1,7 +1,7 @@
 import utils
 
 # Compute number of numbers under 50 million that are prime1^2 + prime2^3 + prime3^4
-def compute():
+def compute(verbose=False):
 	MAX = 5*10**7
 	PRIMES = utils.get_first_primes(utils.isqrt(MAX)+2000) # Get some buffer on the end
 	quad_max = int(MAX**0.25)

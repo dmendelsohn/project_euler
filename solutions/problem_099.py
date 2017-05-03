@@ -2,7 +2,7 @@ import math
 import utils
 
 # Determine which of the given a^b values is biggest
-def compute():
+def compute(verbose=False):
 	text = open(utils.INPUT_PATH + 'p099_base_exp.txt').read().split('\n')
 	pairs = map(lambda line: list(map(int, line.split(','))), text)
 	logs = list(map(lambda pair: pair[1]*math.log(pair[0]), pairs))  # Get log_2 of each a^b

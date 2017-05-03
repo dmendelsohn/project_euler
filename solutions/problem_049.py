@@ -1,7 +1,7 @@
 import utils
 
 # Get increasing 4-digit 3-element arithmetic sequence where all elements are prime and permutations of one another
-def compute():
+def compute(verbose=False):
 	PRIMES = utils.get_first_primes(10**4, as_set=True)
 	DIGITS = {n:utils.get_sorted_digits(n) for n in range(10**3, 10**4)}
 	for n in range(10**3, 10**4):

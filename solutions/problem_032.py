@@ -2,7 +2,7 @@ import utils
 import itertools
 
 # Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
-def compute():
+def compute(verbose=False):
 	def is_pandigital(a,b):
 		combined_digits = utils.get_digits(a) + utils.get_digits(b) + utils.get_digits(a*b)
 		return sorted(combined_digits) == list(range(1,10))

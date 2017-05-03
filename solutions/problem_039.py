@@ -1,7 +1,7 @@
 import utils
 
 # What p <= 1000 is the sum of the most Pythagorean triples?
-def compute():
+def compute(verbose=False):
 	MEMO = {}  # Perimiter : # Pythagorean triples with that perimeter
 	for a in range(1,334):
 		for b in range(a, (1000-a)//2):

@@ -2,7 +2,7 @@ import utils
 
 # Consider all looping chains by iteratively taking sum of proper divisors of a number.  What's the
 # minimum element in the longest chain that has no value exceeding one million?
-def compute():
+def compute(verbose=False):
 	MAX = 1+10**6
 	sigmas = utils.get_first_sigmas(MAX)
 	for i in range(len(sigmas)):

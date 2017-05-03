@@ -1,7 +1,7 @@
 import utils
 
 # How many (not necessarily distinct) values of nCr > 10**6, n in [1,100], r in [0,n]
-def compute():
+def compute(verbose=False):
 	FACTS = utils.get_first_factorials(101)
 	def get_min_r(n, cutoff): # Return minimum r for which nCr > cutoff
 		for r in range(0, n+1):

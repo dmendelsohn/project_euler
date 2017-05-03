@@ -1,5 +1,5 @@
 # What number < one million produces the longest Collatz chain?
-def compute():
+def compute(verbose=False):
 	MEMO = {}
 	def collatz(n):
 		if n in MEMO:

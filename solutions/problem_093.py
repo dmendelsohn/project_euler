@@ -10,7 +10,7 @@ from fractions import Fraction
 
 # Solved by finding all reachable numbers for a given set of digits by making all possible
 # evaluation trees
-def compute():
+def compute(verbose=False):
 	# An op is an operator and a boolean, which is whether to reverse, i.e. do (right op left)
 	OPS = [(operator.add, False), (operator.sub, False), (operator.sub, True), \
 		(operator.mul, False), (operator.truediv, False), (operator.truediv, True)]

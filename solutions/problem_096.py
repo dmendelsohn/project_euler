@@ -1,7 +1,7 @@
 import itertools
 
 # Solve the sudokus and sum the three digits top-left number in each
-def compute():
+def compute(verbose=False):
 	def print_puzzle(puzzle):
 		s = ''
 		for r in range(9):

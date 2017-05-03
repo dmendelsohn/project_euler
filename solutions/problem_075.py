@@ -1,7 +1,7 @@
 import utils
 
 # How many L < 1.5 million are sum of EXACTLY ONE Pythagorean triple
-def compute():
+def compute(verbose=False):
 	MAX_NUM = 1500000
 	MEMO = {} # maps L to how many triples (so far) sum to it
 	for m in range(1, utils.isqrt(MAX_NUM)):

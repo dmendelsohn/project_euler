@@ -1,7 +1,7 @@
 import utils
 
 # Just compute the continuous path from top of triangle to bottom with highest sum (same as Problem #18)
-def compute():
+def compute(verbose=False):
 	MEMO = {}
 	def best_to_point(grid, i, j):
 		if (i,j) in MEMO:

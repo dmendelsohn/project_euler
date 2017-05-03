@@ -1,7 +1,7 @@
 import utils
 
 # Find smallest spiral where diagonals are < 10% prime
-def compute():
+def compute(verbose=False):
 	prime_count, diag_count = 0, 1
 	n = 3
 	while True:

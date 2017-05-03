@@ -1,5 +1,5 @@
 # How many ways can 100 be written as sum of at least 2 positive integers?  (Permuting is NOT unique)
-def compute():
+def compute(verbose=False):
 	MAX = 100
 	MEMO = {(i, 1): 1 for i in range(1, MAX+1)}
 	def count_partitions(n,k):  # Number of ways to sum to n with integers at most k

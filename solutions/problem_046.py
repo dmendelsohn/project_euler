@@ -2,7 +2,7 @@ import itertools
 import utils
 
 # What is the smallest odd composite that cannot be written as the sum of a prime and twice a square?
-def compute():
+def compute(verbose=False):
 	MAX = 10**4 # Trial and error
 	PRIMES = utils.get_first_primes(MAX)
 	SQUARES = [i**2 for i in range(utils.isqrt(MAX))] # First squares

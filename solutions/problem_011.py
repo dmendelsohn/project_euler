@@ -3,7 +3,7 @@ import operator
 from functools import reduce
 
 # Compute highest product of 'line' of four elements in grid
-def compute():
+def compute(verbose=False):
 	# Compute highest product of line in a specific direction, specified by 'step'
 	def answer(grid, step, num=4):  # Assume grid is well-formed, step is (row_delta, col_delta)
 		num_rows, num_cols, best = len(grid), len(grid[0]), 0

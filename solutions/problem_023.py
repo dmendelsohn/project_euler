@@ -2,7 +2,7 @@ import itertools
 import utils
 
 # Add all numbers that can't be written as sum of two abundant numbers
-def compute():  # Kinda slow
+def compute(verbose=False):  # Kinda slow
 	MAX=28123  # Thanks, math!
 	sigmas = utils.get_first_sigmas(MAX)
 	abundant_nums = [i for i in range(MAX) if 2*i < sigmas[i]]

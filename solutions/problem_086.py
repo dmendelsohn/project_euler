@@ -5,7 +5,7 @@ import utils
 # Observation: For a 'new' solution (cube's max dimension = M), we need a Pythagorean
 # triple with a side of length M (and we count how many ways to divide the other side)
 # In dividing the other side, recall that the order of the partition does not matter
-def compute():
+def compute(verbose=False):
 	MAX = 10**4 # Maximum M, tuned down by trial and error
 	new_sols = {}  # key i is count of how many new solutions m=i is (compared to m=i-1)
 	triangles = [] # This will be (a,b) for all Pythagorean triples that may contribute solutions

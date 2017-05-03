@@ -3,7 +3,7 @@ import random
 
 # Compute the most three most likely squares in monopoly if 4-sided dice are used
 # Warning!  This is probabilistic and may yield wrong answer (but it's not too likely)
-def compute():
+def compute(verbose=False):
 	GO, JAIL, G2J = 0, 10, 30
 	RR = [5,15,25,35]  # Railroads
 	U = [12,28] # Utilities

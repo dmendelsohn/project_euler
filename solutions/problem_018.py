@@ -1,7 +1,7 @@
 import utils
 
 # Compute maximum sum down the triangle
-def compute():
+def compute(verbose=False):
 	MEMO = {}
 	def best_to_point(grid, i, j):
 		if (i,j) in MEMO:

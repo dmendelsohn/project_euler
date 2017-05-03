@@ -1,7 +1,7 @@
 import utils
 
 # Compute number of words in the file whose numerical score is a triangle number
-def compute():
+def compute(verbose=False):
 	def word_score(word):
 		return sum(ord(c)-64 for c in word)
 	tri_nums = {n*(n+1)/2 for n in range(1,100)}

@@ -1,7 +1,7 @@
 import utils
 
 # How many poker hands does player 1 win?
-def compute():
+def compute(verbose=False):
 	RANKS = '0123456789TJQKA'
 	VALUES = {RANKS[i]:i for i in range(len(RANKS))}
 	HIGH, PAIR, TWO_PAIR, THREE_KIND, STRAIGHT, FLUSH, FULL_HOUSE, FOUR_KIND, STRAIGHT_FLUSH = tuple(range(9))

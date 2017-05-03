@@ -1,7 +1,7 @@
 import utils
 
 # How many Lychrel #s below 10^4?
-def compute():
+def compute(verbose=False):
 	def apply_step(x):
 		return x + utils.make_number(utils.get_digits(x, reverse=True))  # Add its reverse
 	def is_lychrel(x):

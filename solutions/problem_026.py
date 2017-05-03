@@ -1,5 +1,5 @@
 # Find d < 1000 for which 1/d has longest repeating cycle
-def compute():
+def compute(verbose=False):
 	NINES = [10**i-1 for i in range(1,1500)]
 	def length_of_repeat(x):
 		if (x%2 == 0 or x%5==0):

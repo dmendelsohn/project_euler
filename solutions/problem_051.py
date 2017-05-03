@@ -2,7 +2,7 @@ import itertools
 import utils
 
 # Find the lowest number where swapping out 3 identical digits can yield 7 other primes
-def compute():
+def compute(verbose=False):
 	PRIMES = utils.get_first_primes(10**6, as_set=True) # Limit of 10**6 found by trial and error
 	def is_root_of_8_fam(prime):
 		digits = utils.get_digits(prime)

@@ -1,7 +1,7 @@
 import utils
 
 # What is the value of the first triangle number to have over five hundred divisors?  Solution is 12375th triangle #...OPTIMIZE
-def compute():               
+def compute(verbose=False):               
 	n = 1
 	fact = utils.prime_factorize(n)
 	while True:

@@ -5,7 +5,7 @@ import utils
 # After some rearranging we can restate the problem:
 # For all x of the form 2^a * k^2, where a > 0 and k odd, Let x-1, x-1, x-2 or x+1, x+1, x+2 be the sides
 # ... area will be integer iff x * perimeter is square
-def compute():
+def compute(verbose=False):
 	MAX = 10**9
 	total_perimeter = 0 # Total perimeter
 	max_k = utils.isqrt(MAX//6)

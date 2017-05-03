@@ -2,7 +2,7 @@ import utils
 
 # How many starting numbers below ten million will arrive at 89 by repeatedly doing sum of squares of digits
 # Notice optimization of identifying numbers by their digits, order doesn't matter
-def compute():
+def compute(verbose=False):
 	# Get all sorted sets of num_digits distinct digits that are >= k, as list of tuples
 	def get_digit_sets(num_digits, min_value=0):
 		if num_digits == 1:  # Base case

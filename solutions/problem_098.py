@@ -2,7 +2,7 @@ import itertools
 import utils
 
 # Compute largest square formed by an anagramic pair
-def compute():  # We generally treat words as list of ints 0...25
+def compute(verbose=False):  # We generally treat words as list of ints 0...25
 	# Return tuple of 26 elements, representing the counts of a...z respectively
 	def get_frequency_dist(word):
 		count = [0]*26

@@ -1,7 +1,7 @@
 import utils
 
 # What is 10001st prime number
-def compute():
+def compute(verbose=False):
 	prime_count = 1  # To account for 2, which we skip
 	current_number = 1
 	while (prime_count < 10001):

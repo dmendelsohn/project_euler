@@ -3,7 +3,7 @@ import utils
 from functools import reduce
 
 # Find D in [2,1000] for which mininum solution (in x) for x^2 - D*y^2 = 1 is highest
-def compute():
+def compute(verbose=False):
 	def rationalize(num, tup):  # Takes in fraction of form num / (a*sqrt(b)+c); tup = (a,b,c)
 		(a, b, c) = tup
 		num = (num*a, b, -num*c)

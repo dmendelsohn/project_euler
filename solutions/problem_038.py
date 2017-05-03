@@ -1,6 +1,6 @@
 import utils
 
-def compute():
+def compute(verbose=False):
 	def get_pandigital_mult(n):
 		mult = 0
 		digits = []

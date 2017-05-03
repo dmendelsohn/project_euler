@@ -2,7 +2,7 @@ import itertools
 import utils
 
 # What is largest n-digit pandigital prime?
-def compute():
+def compute(verbose=False):
 	best = 0
 	for num_digits in range(1,10):
 		for perm in itertools.permutations(range(1, num_digits + 1)):

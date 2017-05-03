@@ -1,7 +1,7 @@
 import utils
 
 # Find sum of numbers under one million that are palindromes in both base 2 and base 10
-def compute():
+def compute(verbose=False):
 	answer = 0
 	for i in range(1, 1000):
 		root = utils.get_digits(i, reverse=True)  # This will be 'root' of both even and odd palindrome (in base 10)

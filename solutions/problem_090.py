@@ -2,7 +2,7 @@ import operator
 import itertools
 
 # How many distinct pairs of dice can generate all squares between 01 and 81?  6 and 9 are distinct but can be used interchangeably
-def compute():
+def compute(verbose=False):
 	targets = [(0,1),(0,4),(0,6),(1,6),(2,5),(3,6),(4,6),(8,1)] # Recall 6==9, which simplifies things
 	def is_solution(die1, die2): # Check if all targets can be made by dice (6-tuples)
 		is_sol = True # Initially assume true, change to false if we can't create any target
