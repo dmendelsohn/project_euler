@@ -216,10 +216,12 @@ def get_first_primes(int max_num, as_set=False):
         result.add(2)
         return result
     else:
-        return [2] + [2*i+1 for i in range(1, max_num//2) if sieve[i]]
+        result = array.array('i', (2,))
+        result += array.array('i', (2*i+1 for i in range(1, max_num//2) if sieve[i]))
+        return result
 
 def get_first_totients(int max_num):  # returns list, including zero element (let's define phi(0)=0)
-    primes = get_first_primes(max_num, as_set=False) # Sorted list of relevant primes
+    cdef int[:] primes = get_first_primes(max_num, as_set=False) # Sorted list of relevant primes
     cdef int p, i
     cdef int[:] nums = array.array('i', (1,)*max_num)
     cdef int[:] dens = array.array('i', (1,)*max_num)

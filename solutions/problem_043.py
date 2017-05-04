@@ -1,13 +1,21 @@
-import itertools
-import utils
+import numpy as np
+import fast
+import sys
 
-# Find the sum of all 0 to 9 pandigital numbers with this property. (See description)
+# Find the sum of all 0 to 9 pandigital numbers with this property. (See online description)
 def compute(verbose=False):
-    MODS = [2, 3, 5, 7, 11, 13, 17]
-    def has_property(x): #assumes 0-9 pandigital
-        for i in range(len(MODS)):
-        	if ((x//10**(6-i))%1000)%MODS[i] != 0:
-        		return False
-        return True
-    perms = [utils.make_number(d) for d in itertools.permutations(range(10), 10)]
-    return sum(filter(has_property, perms)), 'Number of 0-9 pandigital numbers with the property'
+    perms = fast.permutations(10)
+    condition = (perms[4,:]%5==0) & (perms[6,:]%2==0)  # Filter out ones that fail the 2 or 5 test
+    for i in range(10):
+        perms[i,:] *= (10**i)
+    perms = np.sum(perms, axis=0)
+    perms = np.where(condition, perms, np.zeros(perms.size)).astype(np.int64)
+    perms = perms[perms != 0] # Filter out zeroes
+    answer = fast.p43_sum_with_property(perms)
+    return answer, 'Sum of 0-9 pandigital numbers with the property'
+
+if __name__ == "__main__":
+    verbose = False
+    for arg in sys.argv:
+        verbose = (verbose or "verbose" in arg)
+    print(compute(verbose)[0])
