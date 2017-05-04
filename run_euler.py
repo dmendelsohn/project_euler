@@ -3,6 +3,7 @@ import traceback
 import operator
 import importlib
 import re
+import pyximport; pyximport.install()
 from datetime import datetime as dt 
 
 ERROR = 'RUNTIME ERROR'
