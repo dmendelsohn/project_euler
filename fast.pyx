@@ -35,6 +35,57 @@ def permutations(n):
         f = f*(i+1)
     return p[:n, :]
 
+cdef int p14_collatz(long n, int[:] cache):
+    cdef int result
+    if n < 10**6 and cache[n] > 0:
+            result = cache[n] #Cached
+    elif n==1:
+        result = 1 # Base case
+    elif n%2==0:
+        result = 1+p14_collatz(n>>1, cache)
+    else:
+        result = 1+p14_collatz(3*n+1, cache)
+    if n < 10**6:
+        cache[n] = result
+    return result
+
+def p14_helper(int max_num):
+    cdef int[:] cache = array.array('i', (0,)*(max_num))
+    cdef int best_length = 0
+    cdef int best_i = 0
+    cdef int i, length
+    for i in range(1,max_num):
+        length = p14_collatz(i, cache)
+        if length > best_length:
+            best_length = length
+            best_i = i
+    return best_i , "The number under one million that produces longest Collatz chain (%d)" % (best_length,)
+
+cpdef p23_get_possible_sums(abundant_nums, int max_num):
+    cdef int[:] nums = array.array('i', abundant_nums)
+    cdef int[:] possible = array.array('i', (0,)*max_num)
+    cdef int i,j, total
+    for i in range(len(nums)):
+        for j in range(i, len(nums)):
+            total = nums[i] + nums[j]
+            if total < max_num:
+                possible[total] = 1
+    return set([i for i in range(max_num) if possible[i] > 0])
+
+cpdef p30_helper():
+    cdef int limit = 2*(10**5)
+    cdef int total = 0
+    cdef int i, j, sum_of_powers
+    for i in range(10,limit):
+        sum_of_powers = 0
+        j = i
+        while j > 0:
+            sum_of_powers += (j%10)**5
+            j //= 10
+        if i == sum_of_powers:
+            total += i
+    return total
+
 # Will only work up to 64-bit long
 def p43_sum_with_property(long[:] perms):
     cdef int i
