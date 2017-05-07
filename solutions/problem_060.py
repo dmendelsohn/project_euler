@@ -1,9 +1,11 @@
 import itertools
 import utils
+import array
 
 # Find smallest number that's sum of 5 primes, s.t. all pairwise concatenations of those 5 is also prime
 # Observation: 5 primes must all be equivalent mod 3 (except 3 itself is always fine)
 # WARNING: Long-ish runtime (40s)
+#@profile
 def compute(verbose=False):
     MAX_NUM = 10**8
     PRIMES = utils.get_first_primes(MAX_NUM, as_set=True)
@@ -48,7 +50,12 @@ def compute(verbose=False):
         print("There are %d edges" % (len(cliques[2]),))
     for i in range(2,5): #Build 2->3, 3->4, 4->5 cliques
         for c in cliques[i]: # Shall we expand this clique?
-            for new_prime in primes[c[-1]%3-1]: #Only iterate over useful primes
+            biggest = c[-1]
+            mod = biggest%3-1
+            for j in range(len(primes[mod])-1,0,-1): #Only iterate over useful primes
+                new_prime = primes[mod][j]
+                if new_prime <= biggest:
+                    break
                 if is_valid_expansion(c, new_prime, cliques[2]):
                     cliques[i+1].add((c+(new_prime,)))
         if verbose:
@@ -59,3 +66,6 @@ def compute(verbose=False):
         return min(map(sum, cliques[5])), "Minimum sum of 5-clique"
     else:
         return -1, 'No solution found'
+
+if __name__ == "__main__":
+    print(compute(True))

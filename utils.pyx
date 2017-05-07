@@ -63,12 +63,21 @@ def frac_le(a, b):  # a and b are both (num, den) fractions
 def frac_ge(a, b):  # a and b are both (num, den) fractions
     return a[0]*b[1] >= a[1]*b[0]
 
-def isqrt(n):  # Newton's method
+def isqrt_big(n): # Newton's method
     x = n
-    y = (x + 1) // 2
+    y = (x+1) >> 1
     while y < x:
         x = y
-        y = (x + n // x) // 2
+        y = (x + n // x) >> 1
+    return x
+
+cpdef long isqrt(long n):  # Newton's method
+    cdef long x, y
+    x = n
+    y = (x + 1) >> 1
+    while y < x:
+        x = y
+        y = (x + n // x) >> 1
     return x
 
 def is_square(n):
@@ -134,7 +143,6 @@ def is_palindrome(x, base=10):
     return digits == digits[::-1]
 
 def prime_factorize(x): # Returns dict of factors to multiplicity
-    cdef int i
     if x == 1:  # Handle this edge case
         return {}
     d = {}
@@ -220,7 +228,7 @@ def get_first_primes(int max_num, as_set=False):
         result += array.array('i', (2*i+1 for i in range(1, max_num//2) if sieve[i]))
         return result
 
-def get_first_totients(int max_num):  # returns list, including zero element (let's define phi(0)=0)
+cpdef get_first_totients(int max_num):  # returns list, including zero element (let's define phi(0)=0)
     cdef int[:] primes = get_first_primes(max_num, as_set=False) # Sorted list of relevant primes
     cdef int p, i
     cdef int[:] nums = array.array('i', (1,)*max_num)
@@ -229,7 +237,10 @@ def get_first_totients(int max_num):  # returns list, including zero element (le
         for i in range(p, max_num, p):  # All multiples of p
             nums[i] *= (p-1)
             dens[i] *= p
-    return [0] + [i//dens[i]*nums[i] for i in range(1, max_num)]
+    nums[0] = 0
+    for i in range(1, max_num):
+        nums[i] = i//dens[i]*nums[i]
+    return nums
 
 def get_first_num_divisors(int max_num): # returns list, including zero element, (let's say 0 and 1 have 1 divisor)
     cdef int i, num

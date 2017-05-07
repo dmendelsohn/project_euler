@@ -21,9 +21,6 @@ cdef long test_pent(long x): # Returns 1 iff sqrt(24x+1)%5 == 6, 0 else
     else:
         return 0
 
-def test_test_pent(n):
-    return test_pent(n)
-
 def permutations(n):
     f = 1
     p = np.empty((2*n-1, math.factorial(n)), np.int64)
@@ -34,6 +31,39 @@ def permutations(n):
             p[:i+1, f*(j+1):f*(j+2)] = p[j+1:j+i+2, :f]  # copie de blocs
         f = f*(i+1)
     return p[:n, :]
+
+def prime_factorize(long x): # Returns dict of factors to multiplicity
+    cdef int i
+    if x == 1:  # Handle this edge case
+        return {}
+    cdef int[:] primes = array.array('i', (0,)*18) # Max number of prime factors for num < 2^64
+    cdef int[:] mults = array.array('i', (0,)*18)
+    cdef int length = 0
+    i = 2
+    while i <= isqrt(x):
+        if x%i == 0:
+            if length > 0 and primes[length-1] == i:
+                mults[length-1] += 1
+            else:
+                length += 1
+                primes[length-1] = i
+                mults[length-1] = 1
+            x //= i
+        else:
+            i += 1
+    # Leftover x is prime
+    if length > 0 and primes[length-1] == x:
+      mults[length-1] += 1
+    else:
+        length += 1
+        primes[length-1] = x
+        mults[length-1] = 1
+    d = {} # Build dictionary for return
+    for i in range(length):
+        d[primes[i]] = mults[i]
+    return d
+
+
 
 cdef int p14_collatz(long n, int[:] cache):
     cdef int result
@@ -86,6 +116,21 @@ cpdef p30_helper():
             total += i
     return total
 
+cpdef p34_helper():
+    cdef int[:] facts = array.array('i', utils.get_first_factorials(10))
+    cdef int i, j
+    cdef int total = 0
+    cdef int sum_of_facts
+    for i in range(10, 7*facts[9]):
+        sum_of_facts = 0
+        j = i
+        while j > 0:
+            sum_of_facts += facts[j%10]
+            j //= 10
+        if i == sum_of_facts:
+            total += i
+    return total
+
 # Will only work up to 64-bit long
 def p43_sum_with_property(long[:] perms):
     cdef int i
@@ -106,17 +151,16 @@ def p43_has_property(long x):
 
 def p44_helper():
     cdef int i, j, ival, jval, best, diff
-    cdef int[:] pent = array.array('i',(i*(3*i-1)>>1 for i in range(1,10**4)))
+    MAX = 2400
+    cdef int[:] pent = array.array('i',(i*(3*i-1)>>1 for i in range(1,MAX)))
     best = 10**9
-    #for i in range(10**4-1):
-    #    for j in range(i+1, 10**4-1):
-    for diff in range(1, 10**4-1):
-        for i in range(1, 10**4-1-diff):
+    for diff in range(1, MAX-1):
+        for i in range(1, MAX-1-diff):
             j = i + diff
             ival = pent[i]
             jval = pent[j]
             if (jval - ival) > best:
-                continue
+                break
             if test_pent(jval-ival) and test_pent(jval+ival):
                 best = jval - ival
     return best, 'Smallest pentagonal difference between two pentagonal numbers whose sum is also pentagonal'
@@ -138,15 +182,36 @@ cdef int p70_is_permutation(int x, int y): # In current form, only works up to 2
             return 0
     return 1
 
-def p70_helper(int[:] phis):
-    cdef float min_ratio = 100
+def p70_helper_old(int max_num):
+    cdef int[:] phis = utils.get_first_totients(max_num)
+    cdef float min_ratio = 1.01 # Empirically found upper bound
     cdef float ratio
     cdef int i, phi, min_index
     for i in range(2,len(phis)):
         phi = phis[i]
-        if phi != 0 and p70_is_permutation(i, phi):
+        if phi != 0:
             ratio = 1.0*i/phi
             if ratio < min_ratio:
-                min_ratio = ratio
-                min_index = i
+                if p70_is_permutation(i,phi):
+                    min_ratio = ratio
+                    min_index = i
+    print(min_ratio)
     return min_index
+
+# Assumes number is product of two primes
+def p70_helper():
+    cdef int[:] primes = utils.get_first_primes(10**4)
+    cdef int i, j, phi, n
+    cdef float ratio
+    cdef int best_n = 0
+    cdef float best_ratio = 1.001
+    for i in range(len(primes)):
+        for j in range(i, len(primes)):
+            phi = (primes[i]-1) * (primes[j]-1)
+            n = primes[i]*primes[j]
+            ratio = 1.0*n/phi
+            if n < 10**7 and ratio < best_ratio:
+                if p70_is_permutation(n, phi):
+                    best_ratio = ratio
+                    best_n = n
+    return best_n
