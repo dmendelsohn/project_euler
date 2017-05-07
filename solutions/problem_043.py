@@ -1,10 +1,11 @@
 import numpy as np
+import utils
 import fast
 import sys
 
 # Find the sum of all 0 to 9 pandigital numbers with this property. (See online description)
 def compute(verbose=False):
-    perms = fast.permutations(10)
+    perms = utils.permutations_1_to_n(10)
     condition = (perms[4,:]%5==0) & (perms[6,:]%2==0)  # Filter out ones that fail the 2 or 5 test
     for i in range(10):
         perms[i,:] *= (10**i)

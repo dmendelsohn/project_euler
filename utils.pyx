@@ -5,6 +5,7 @@ import operator
 import collections
 import itertools
 from functools import reduce
+import numpy as np
 
 
 INPUT_PATH = 'inputs/'
@@ -12,7 +13,7 @@ INPUT_PATH = 'inputs/'
 def num_digits(x):
     return 1+int(math.log10(x))
 
-def gcd(a, b):
+cpdef gcd(long a, long b):
     while b:
         a, b = b, a%b
     return a
@@ -142,7 +143,7 @@ def is_palindrome(x, base=10):
     digits = get_digits(x, base=base)
     return digits == digits[::-1]
 
-def prime_factorize(x): # Returns dict of factors to multiplicity
+def prime_factorize_big(x): # Returns dict of factors to multiplicity
     if x == 1:  # Handle this edge case
         return {}
     d = {}
@@ -156,6 +157,37 @@ def prime_factorize(x): # Returns dict of factors to multiplicity
     d[x] = d.get(x,0)+1 # Leftover x is prime
     return d
 
+def prime_factorize(long x): # Returns dict of factors to multiplicity
+    cdef int i
+    if x == 1:  # Handle this edge case
+        return {}
+    cdef int[:] primes = array.array('i', (0,)*18) # Max number of prime factors for num < 2^64
+    cdef int[:] mults = array.array('i', (0,)*18)
+    cdef int length = 0
+    i = 2
+    while i <= isqrt(x):
+        if x%i == 0:
+            if length > 0 and primes[length-1] == i:
+                mults[length-1] += 1
+            else:
+                length += 1
+                primes[length-1] = i
+                mults[length-1] = 1
+            x //= i
+        else:
+            i += 1
+    # Leftover x is prime
+    if length > 0 and primes[length-1] == x:
+      mults[length-1] += 1
+    else:
+        length += 1
+        primes[length-1] = x
+        mults[length-1] = 1
+    d = {} # Build dictionary for return
+    for i in range(length):
+        d[primes[i]] = mults[i]
+    return d
+
 def multiply_factorizations(a, b):
     cdef int p
     primes = set(a.keys()).union(set(b.keys()))
@@ -166,7 +198,7 @@ def count_divisors(d):  # d is factorization dictionary
     return reduce(lambda a,b: a*(b+1), d.values(), 1)
 
 def num_divisors(x):
-    return count_divisors(prime_factorize(x))
+    return count_divisors(prime_factorize_big(x))
 
 def sum_divisors(int n): # Aka sigma(n)
     cdef int total, sqrt, i
@@ -268,6 +300,17 @@ def get_num_permutations(l):
     mults = collections.Counter(l).values()
     den = reduce(operator.mul, (math.factorial(v) for v in mults), 1)
     return num // den
+
+def permutations_1_to_n(n):
+    f = 1
+    p = np.empty((2*n-1, math.factorial(n)), np.int64)
+    for i in range(n):
+        p[i, :f] = i
+        p[i+1:2*i+1, :f] = p[:i, :f]  # constitution de blocs
+        for j in range(i):
+            p[:i+1, f*(j+1):f*(j+2)] = p[j+1:j+i+2, :f]  # copie de blocs
+        f = f*(i+1)
+    return p[:n, :]
 
 def powerset(iterable):
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"

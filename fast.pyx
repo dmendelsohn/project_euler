@@ -1,69 +1,6 @@
 import numpy as np
 import array
-import math
 import utils
-import itertools
-
-cdef long isqrt(long n):  # Newton's method
-    cdef long x, y
-    x = n
-    y = (x + 1) >> 1
-    while y < x:
-        x = y
-        y = (x + n // x) >> 1
-    return x
-
-cdef long test_pent(long x): # Returns 1 iff sqrt(24x+1)%5 == 6, 0 else
-    cdef long y = 24*x+1
-    cdef long sqrt = isqrt(y)
-    if sqrt**2==y and sqrt%6==5:
-        return 1
-    else:
-        return 0
-
-def permutations(n):
-    f = 1
-    p = np.empty((2*n-1, math.factorial(n)), np.int64)
-    for i in range(n):
-        p[i, :f] = i
-        p[i+1:2*i+1, :f] = p[:i, :f]  # constitution de blocs
-        for j in range(i):
-            p[:i+1, f*(j+1):f*(j+2)] = p[j+1:j+i+2, :f]  # copie de blocs
-        f = f*(i+1)
-    return p[:n, :]
-
-def prime_factorize(long x): # Returns dict of factors to multiplicity
-    cdef int i
-    if x == 1:  # Handle this edge case
-        return {}
-    cdef int[:] primes = array.array('i', (0,)*18) # Max number of prime factors for num < 2^64
-    cdef int[:] mults = array.array('i', (0,)*18)
-    cdef int length = 0
-    i = 2
-    while i <= isqrt(x):
-        if x%i == 0:
-            if length > 0 and primes[length-1] == i:
-                mults[length-1] += 1
-            else:
-                length += 1
-                primes[length-1] = i
-                mults[length-1] = 1
-            x //= i
-        else:
-            i += 1
-    # Leftover x is prime
-    if length > 0 and primes[length-1] == x:
-      mults[length-1] += 1
-    else:
-        length += 1
-        primes[length-1] = x
-        mults[length-1] = 1
-    d = {} # Build dictionary for return
-    for i in range(length):
-        d[primes[i]] = mults[i]
-    return d
-
-
 
 cdef int p14_collatz(long n, int[:] cache):
     cdef int result
@@ -149,6 +86,14 @@ def p43_has_property(long x):
             return False
     return True
 
+cdef long p44_test_pent(long x): # Returns 1 iff sqrt(24x+1)%5 == 6, 0 else
+    cdef long y = 24*x+1
+    cdef long sqrt = utils.isqrt(y)
+    if sqrt**2==y and sqrt%6==5:
+        return 1
+    else:
+        return 0
+
 def p44_helper():
     cdef int i, j, ival, jval, best, diff
     MAX = 2400
@@ -161,7 +106,7 @@ def p44_helper():
             jval = pent[j]
             if (jval - ival) > best:
                 break
-            if test_pent(jval-ival) and test_pent(jval+ival):
+            if p44_test_pent(jval-ival) and p44_test_pent(jval+ival):
                 best = jval - ival
     return best, 'Smallest pentagonal difference between two pentagonal numbers whose sum is also pentagonal'
 
@@ -215,3 +160,17 @@ def p70_helper():
                     best_ratio = ratio
                     best_n = n
     return best_n
+
+def p73_helper():
+    cdef int n = 12000 # Max denominator (Farey sequence n=12000)
+    cdef int a = 1
+    cdef int b = 3 # Fraction 1/3
+    cdef int c = 4000
+    cdef int d = 11999 # Next biggest one after 1/3, found by trial and error
+    cdef int count = 0
+    cdef int e, f
+    while d != 2: # While we haven't reached 1/2
+        e, f = (n + b)//d*c - a, (n + b)//d*d - b
+        a, b, c, d = c, d, e, f # Shift
+        count += 1
+    return count

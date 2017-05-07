@@ -6,7 +6,7 @@ def compute(verbose=False):
     n = 1
     fact = utils.prime_factorize(n)
     while True:
-        next_fact = fast.prime_factorize(n+1)
+        next_fact = utils.prime_factorize(n+1)
         prod_fact = utils.multiply_factorizations(fact, next_fact)
         prod_fact[2] -= 1 # Divide by 2
         if (utils.count_divisors(prod_fact) > 500):
