@@ -2,64 +2,48 @@ import itertools
 import operator
 import utils
 
-from fractions import Fraction
-
 # For a set of digits, we can combine them with any operation to reach many targets.
 # Find set of digits with ability to reach all 1...n for the highest n
-# Warning: Runtime ~ 22s
-
-# Solved by finding all reachable numbers for a given set of digits by making all possible
-# evaluation trees
 def compute(verbose=False):
-    # An op is an operator and a boolean, which is whether to reverse, i.e. do (right op left)
     OPS = [(operator.add, False), (operator.sub, False), (operator.sub, True), \
         (operator.mul, False), (operator.truediv, False), (operator.truediv, True)]
+    MEMO = {} # Maps sorted tuples of digits to set of reachable values
+    MEMO[tuple()] = set() # Empty tuple of digits can reach the empty set of values
+    for i in range(10): # 
+         MEMO[(i,)] = set([i]) # A single digit can only reach itself
+    def get_possible_values(digits):
+        if digits in MEMO:
+            return MEMO[digits]
+        possible = set()
+        for subset in utils.powerset(digits[1:]):
+            left = (digits[0],)+subset
+            if len(left) == len(digits):
+                continue # Skip this, to avoid infinite recursion
+            right = tuple(sorted(set(digits)-set(left)))
+            left_vals = get_possible_values(left)
+            right_vals = get_possible_values(right)
+            for (left_val, right_val, op) in itertools.product(left_vals, right_vals, OPS):
+                if op[1]: # Reverse if necessary
+                    left_val, right_val = right_val, left_val
+                try:
+                    new_val = op[0](left_val, right_val)
+                    possible.add(new_val)
+                except ZeroDivisionError:
+                    continue # Just move on
+        MEMO[digits] = possible
+        return possible
 
-    # Represent computations option as tree: leaves are int, non-leaves are operations 
-    # on their child subtrees
-    def generate_trees(digits):  # digits is a set or a tuple of digits
-        digits = set(digits) # Cast to set
-        if len(digits) == 0:
-        	return [] # No solutions
-        if len(digits) == 1:
-        	return [list(digits)[0]] # Trivial solution, just a leave of the tree
-        # Map each subset of digits to list of possible subtrees
-        # Be sure to skip the 'full' subset or we get infinite recursion
-        subtrees = {frozenset(subset):generate_trees(subset) \
-        	for subset in utils.powerset(digits) if len(subset) != len(digits)} 
-        results = []
-        # Iterate through subsets containing smallest elt
-        for subset in filter(lambda s: min(digits) in s, subtrees.keys()):
-        	subset = frozenset(subset) # Need hashable sets, frozenset works
-        	complement = frozenset(digits - subset)
-        	for (left, right) in itertools.product(subtrees[subset], subtrees[complement]):
-        		results.extend([(op, left, right) for op in OPS])
-        return results
-
-    # Tree is either an int, or a tuple of the form ((op, reverse), left_tree, right_tree)
-    # Return Fraction if evaluation is possible, or else None
-    def evaluate(tree):  # Use rational numbers, because intermediate result need not be integers
-        if isinstance(tree, int):
-        	return Fraction(tree)
-        (op, reverse), left, right = tree
-        if reverse:
-        	left, right = right, left
-        try:
-        	return op(evaluate(left), evaluate(right))
-        except: # Divide by zero error somewhere down the line
-        	return None
-
-    # Return the first unreachable target for a given set of digits
-    def lowest_impossible(digits):
-        values = set(evaluate(tree) for tree in generate_trees(digits))
-        values = set(int(v) for v in values if v != None and v > 0 and v.denominator == 1)
+    best = 0, () # Lowest_impossible, digits tuple
+    for digits in itertools.combinations(range(10), 4):
+        possible = get_possible_values(digits)
         n = 1
-        while n in values:
-        	n+=1
-        return n
-
-    best = max((lowest_impossible(digits), digits) 
-        		for digits in itertools.combinations(range(10), 4))
-    ans = utils.concatenate_ints(sorted(best[1]))
+        while n in possible:
+            n +=1 # Eventually n will be lowest impossible number
+        if n > best[0]:
+            best = (n, digits)
+    ans = utils.concatenate_ints(best[1])
     text = 'Four digits that allow for highest range of reachable values (up to %d)' % (best[0]-1,)
     return ans, text
+
+if __name__ == "__main__":
+    print(compute())

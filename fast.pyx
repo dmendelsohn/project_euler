@@ -1,6 +1,33 @@
 import numpy as np
 import array
 import utils
+from libcpp.set cimport set as cset
+
+## cdef only helpers for helpers
+
+cdef long isqrt(long n):  # Newton's method
+    cdef long x, y
+    x = n
+    y = (x + 1) >> 1
+    while y < x:
+        x = y
+        y = (x + n // x) >> 1
+    return x
+
+cdef gcd(long a, long b):
+    while b:
+        a, b = b, a%b
+    return a
+
+cdef long sum_of_func_of_digits(long x, int[:] mapping):
+    cdef int total = 0
+    while x > 0:
+        total += mapping[x%10]
+        x //= 10
+    return total
+
+
+## Individual problem helpers
 
 cdef int p14_collatz(long n, int[:] cache):
     cdef int result
@@ -59,11 +86,7 @@ cpdef p34_helper():
     cdef int total = 0
     cdef int sum_of_facts
     for i in range(10, 7*facts[9]):
-        sum_of_facts = 0
-        j = i
-        while j > 0:
-            sum_of_facts += facts[j%10]
-            j //= 10
+        sum_of_facts = sum_of_func_of_digits(i, facts)
         if i == sum_of_facts:
             total += i
     return total
@@ -88,7 +111,7 @@ def p43_has_property(long x):
 
 cdef long p44_test_pent(long x): # Returns 1 iff sqrt(24x+1)%5 == 6, 0 else
     cdef long y = 24*x+1
-    cdef long sqrt = utils.isqrt(y)
+    cdef long sqrt = isqrt(y)
     if sqrt**2==y and sqrt%6==5:
         return 1
     else:
@@ -174,3 +197,147 @@ def p73_helper():
         a, b, c, d = c, d, e, f # Shift
         count += 1
     return count
+
+def p74_helper():
+    cdef int memo_len = int(2.5*10**6) # Found by trial and error
+    cdef int[:] memo = array.array('i', (0,)*memo_len)
+    cdef int[:] facts = array.array('i', utils.get_first_factorials(10))
+    # Set manual values
+    memo[1] = 1
+    memo[2] = 1
+    memo[145] = 1
+    memo[40585] = 1
+    memo[871] = 2
+    memo[45361] = 2
+    memo[872] = 2
+    memo[45362] = 2
+    memo[169] = 3
+    memo[363601] = 3
+    memo[1454] = 3
+    cdef int count = 0
+    cdef int i, j, base_num
+    cdef int[:] chain = array.array('i', (0,)*100) # Reusable buffer
+    cdef int chain_len = 0
+    for i in range(1, 10**6):
+        if memo[i] == 0:
+            j = i
+            chain_len = 0
+            while memo[j] == 0:
+                chain[chain_len] = j
+                chain_len += 1
+                j = sum_of_func_of_digits(j, facts)
+            base_num = memo[j]
+            for j in range(chain_len):
+                memo[chain[j]] = base_num + chain_len - j
+        if memo[i] == 60:
+            count += 1
+    return count
+
+# How many L < 1.5 million are sum of EXACTLY ONE Pythagorean triple
+def p75_helper():
+    MAX_NUM = 1500000
+    cdef int[:] MEMO = array.array('i', (0,)*MAX_NUM)
+    cdef int m, n, base_perim, L
+    for m in range(1, isqrt(MAX_NUM)):
+        for n in range(1, m):
+            if gcd(m,n) != 1 or (m*n)%2==1:
+                continue # Not a primitive triple
+            base_perim = 2*m*(m+n)
+            L = base_perim
+            while L < MAX_NUM:  # Account for multiples of primitive triples with L small enough
+                MEMO[L] += 1
+                L += base_perim
+    cdef int i
+    cdef count = 0
+    for i in range(MAX_NUM):
+        if MEMO[i] == 1:
+            count += 1
+    return count
+
+
+def p78_helper():
+    cdef int[:] MEMO =  array.array('i', (-1,)*60000) # Only need this many, by trial and error
+    MEMO[0] = 1 # By definition, p(0)=1
+    cdef int n = 1
+    cdef int count, k, pent
+    while True:
+        count = 0
+        k = 1
+        pent = k*(3*k-1)>>1
+        while pent <= n:
+            if k%2==1:
+                count += MEMO[n-pent]
+            else:
+                count -= MEMO[n-pent]
+            k = -k
+            if k > 0:
+                k += 1
+            pent = k*(3*k-1)>>1
+        MEMO[n] = count%(10**6)
+        if MEMO[n] == 0:
+            return n
+        n += 1
+
+def p87_helper():
+    MAX = 5*10**7
+    cdef int[:] PRIMES = array.array('i', utils.get_first_primes(isqrt(MAX)+2000))
+    cdef int quad_max = int(MAX**0.25)
+    cdef int trip_max = int(MAX**(1.0/3))
+    cdef int dub_max = int(MAX**0.5)
+    cdef cset[int] results
+    cdef int i, j, k, s
+    i = 0
+    while PRIMES[i] <= quad_max:
+        j = 0
+        while PRIMES[j] <= trip_max: # Can make slight improvement skipping some third powers
+            k = 0
+            while PRIMES[k] <= dub_max: # Can make slight improvement skipping some squares
+                s = PRIMES[i]**4 + PRIMES[j]**3 + PRIMES[k]**2
+                if s < MAX:
+                    results.insert(s)
+                k += 1
+            j += 1
+        i += 1
+    return results.size()
+
+cdef class P93_Node:
+    cdef int op # (0-5 correspond to add, sub, sub_reversed, mul, truediv, truediv_reversed)
+    cdef P93_Node left, right
+    cdef float evaluate(self) except *:
+        cdef float l = self.left.evaluate()
+        cdef float r = self.right.evaluate()
+        if (self.op == 0):
+            return l + r
+        elif (self.op == 1):
+            return l - r
+        elif (self.op == 2):
+            return r - l
+        elif (self.op == 3):
+            return l * r
+        else: # division, op = 4 or 5
+            if (self.op > 4):
+                r, l = l, r
+            if r != 0:
+                return l / r
+            else:
+                raise ValueError("Divide by 0")
+
+def P93_Node p93_convert(tree): # Input is "python style" tree, using tuples
+    #TODO: pass
+
+def int p93_lowest_impossible(python_trees):
+    cdef P93_Node tree
+    cdef float value
+    cdef cset[int] possible
+    for t in python_trees:
+        tree = p93_convert(t)
+        try:
+            value = tree.evaluate()
+            if value > 0 and value%1==0: # Does this actually work?
+                possible.insert(int(value))
+        except ValueError:
+            continue # Skip this tree
+    cdef int n = 1
+    while possible.count(n) == 1
+        n += 1
+    return n

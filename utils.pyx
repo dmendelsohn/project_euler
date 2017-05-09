@@ -130,7 +130,7 @@ def is_permutation(int x, int y): # In current form, only works up to 2^31
     return True
 
 def sum_of_digits(x, int base=10):  # This way I won't have to make a list every time
-    cdef int total
+    cdef long total
     if x == 0:
         return 0
     total = 0
