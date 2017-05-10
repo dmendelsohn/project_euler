@@ -211,9 +211,9 @@ def sum_divisors(int n): # Aka sigma(n)
         total -= sqrt #handle perfect square case
     return total
 
-def get_first_sigmas(int n): # Returns [sigma(n) for i in range(n)], using sieve for efficiency
+def get_first_sigmas(int n, proper=False): # Returns [sigma(n) for i in range(n)], using sieve for efficiency
     cdef int i, mul, prod
-    sigmas = [0 for i in range(n)]
+    cdef int[:] sigmas = array.array('i', (0,)*n)
     for i in range(1, 1+isqrt(n-1)):
         mul = i
         prod = i*mul
@@ -223,6 +223,9 @@ def get_first_sigmas(int n): # Returns [sigma(n) for i in range(n)], using sieve
             prod += i
     for i in range(1, 1+isqrt(n-1)):
         sigmas[i**2] -= i
+    if proper: # Remove i itself as a divisor
+        for i in range(n):
+            sigmas[i] -= i
     return sigmas
 
 def is_prime(int x):

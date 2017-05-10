@@ -1,7 +1,10 @@
 import numpy as np
 import array
 import utils
+import math
 from libcpp.set cimport set as cset
+from libcpp.vector cimport vector
+from libcpp.pair cimport pair
 
 ## cdef only helpers for helpers
 
@@ -25,6 +28,26 @@ cdef long sum_of_func_of_digits(long x, int[:] mapping):
         total += mapping[x%10]
         x //= 10
     return total
+
+cdef int num_digits(int x):
+    return 1+int(math.log10(x))
+
+cdef int is_prime(int x):
+    cdef int i, max_num
+    if x <= 1:
+        return 0
+    elif x <= 3:
+        return 1
+    elif x%2 == 0:
+        return 0
+    else:
+        i = 3
+        max_num = isqrt(x)
+        while i <= max_num:
+            if x%i==0:
+                return 0
+            i += 2
+        return 1
 
 
 ## Individual problem helpers
@@ -132,6 +155,11 @@ def p44_helper():
             if p44_test_pent(jval-ival) and p44_test_pent(jval+ival):
                 best = jval - ival
     return best, 'Smallest pentagonal difference between two pentagonal numbers whose sum is also pentagonal'
+
+cpdef int p60_is_edge(int x, int y):
+    cdef int a = x*(10**(num_digits(y)))+y
+    cdef int b = y*(10**(num_digits(x)))+x
+    return is_prime(a) and is_prime(b)
 
 cdef int p70_is_permutation(int x, int y): # In current form, only works up to 2^31
     if (x-y)%9 != 0: # Can't be permutations if different mod 9
@@ -279,7 +307,7 @@ def p78_helper():
         n += 1
 
 def p87_helper():
-    MAX = 5*10**7
+    cdef int MAX = 5*10**7
     cdef int[:] PRIMES = array.array('i', utils.get_first_primes(isqrt(MAX)+2000))
     cdef int quad_max = int(MAX**0.25)
     cdef int trip_max = int(MAX**(1.0/3))
@@ -289,9 +317,11 @@ def p87_helper():
     i = 0
     while PRIMES[i] <= quad_max:
         j = 0
-        while PRIMES[j] <= trip_max: # Can make slight improvement skipping some third powers
+        trip_max = int((MAX-PRIMES[i]**4)**(1.0/3))
+        while PRIMES[j] <= trip_max:
             k = 0
-            while PRIMES[k] <= dub_max: # Can make slight improvement skipping some squares
+            dub_max = int((MAX-PRIMES[i]**2-PRIMES[j]**3)**0.5)
+            while PRIMES[k] <= dub_max:
                 s = PRIMES[i]**4 + PRIMES[j]**3 + PRIMES[k]**2
                 if s < MAX:
                     results.insert(s)
@@ -299,3 +329,75 @@ def p87_helper():
             j += 1
         i += 1
     return results.size()
+
+cdef struct p88_summary:
+    int length
+    int sum
+    int prod
+
+# Returns list of multiset summaries for multisets meeting constraints
+cdef vector[p88_summary] p88_get_multisets(int max_sum, int max_prod, int max_elt):
+    cdef vector[p88_summary] results, subresults
+    cdef p88_summary s = p88_summary(length=0, sum=0, prod=1)
+    results.push_back(s)
+    cdef int highest_possible = min(max_elt, max_prod, max_elt)
+    cdef int i, j
+    for i in range(2, 1+highest_possible):
+        subresults = p88_get_multisets(max_sum-i, int(max_prod/i), i)
+        for j in range(len(subresults)):
+            subresults[j].length += 1
+            subresults[j].sum += i
+            subresults[j].prod *= i
+        results.insert(results.end(), subresults.begin(), subresults.end())
+    return results
+
+
+def p88_helper():
+    cdef int K = 12000
+    cdef int k, prod
+    cdef int[:] sols = array.array('i', [2*k for k in range(K+1)])
+    cdef int max_size = int(math.log(2*K, 2))
+    cdef vector[p88_summary] multisets = p88_get_multisets(K+max_size, 2*K, K)
+    cdef p88_summary m
+    for m in multisets:
+        prod = m.prod
+        k = m.length + prod - m.sum
+        if k <= K and prod < sols[k]:
+            sols[k] = prod
+    cdef int answer = sum(set(sols[2:]))
+    return answer
+
+def p95_helper():
+    cdef int MAX = 1+10**6
+    cdef int[:] sigmas = utils.get_first_sigmas(MAX, proper=True)
+    cdef unsigned char[:] seen = array.array('B', (0,)*MAX)
+    cdef int[:] chain = array.array('i', (0,)*100) # Assume chains are shorter than 100
+    cdef int chain_len = 0
+    cdef int i, j, k, loop_start
+    cdef int longest_loop_len = 0
+    cdef int answer = MAX
+    for i in range(1, MAX): # i is start of chain
+        j = i
+        chain_len = 0
+        while j < MAX and not seen[j]:
+            seen[j] = 1
+            chain[chain_len] = j
+            chain_len += 1
+            j = sigmas[j]
+
+        # Check for index of j in chain, j is start of loop
+        k = 0
+        loop_start = -1
+        while k < chain_len:
+            if chain[k] == j:
+                loop_start = k
+                break
+            k += 1
+        if loop_start >= 0: # checks that we looped
+            if (chain_len - loop_start) > longest_loop_len:
+                longest_loop_len = chain_len - loop_start
+                answer = chain[loop_start]
+                for k in range(loop_start, chain_len):
+                    answer = min(answer, chain[k])
+    return answer        
+    #return min(longest_chain), 'Minimum element in longest "sum of proper divisors" chain'
