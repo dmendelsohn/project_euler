@@ -11,6 +11,6 @@ def compute(verbose=False):
         arcs = [(angles[i]-angles[i-1])%(2*math.pi) for i in range(3)] # Gaps between those vectors
         return max(arcs) < (math.pi - 0.000001) # If maximum arc is strictly less than pi, origin is inside triangle
     lines = open(utils.INPUT_PATH + 'p102_triangles.txt').read().strip().split('\n')
-    triangles = map(lambda line: map(int, line.split(',')), lines)  # Triangle is now list of ints
-    answer = len(filter(contains_origin, triangles))
+    triangles = map(lambda line: list(map(int, line.split(','))), lines)  # Triangle is now list of ints
+    answer = len(list(filter(contains_origin, triangles)))
     return answer, 'Number of triangles containing the origin'
