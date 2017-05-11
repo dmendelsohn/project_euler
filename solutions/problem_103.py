@@ -21,6 +21,7 @@ def compute(verbose=False):
         if sum(t[:2]) <= t[-1] or sum(t[:3]) <= sum(t[:4:-1]) or sum(t[:4]) <= sum(t[:3:-1]):
             continue # Doesn't meet second condition
 
+        # Note: we could speed this up using logic in problem 106; not worth the complexity
         # Make sure no two pairs have same sum (to optimize: only check disjoint pairs)
         pair_sums = set()
         is_valid = True
