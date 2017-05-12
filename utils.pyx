@@ -188,6 +188,37 @@ def prime_factorize(long x): # Returns dict of factors to multiplicity
         d[primes[i]] = mults[i]
     return d
 
+def prime_factorize_big(x): # Returns dict of factors to multiplicity
+    cdef int i
+    if x == 1:  # Handle this edge case
+        return {}
+    cdef int[:] primes = array.array('i', (0,)*18) # Max number of prime factors for num < 2^64
+    cdef int[:] mults = array.array('i', (0,)*18)
+    cdef int length = 0
+    i = 2
+    while i <= isqrt_big(x):
+        if x%i == 0:
+            if length > 0 and primes[length-1] == i:
+                mults[length-1] += 1
+            else:
+                length += 1
+                primes[length-1] = i
+                mults[length-1] = 1
+            x //= i
+        else:
+            i += 1
+    # Leftover x is prime
+    if length > 0 and primes[length-1] == x:
+      mults[length-1] += 1
+    else:
+        length += 1
+        primes[length-1] = x
+        mults[length-1] = 1
+    d = {} # Build dictionary for return
+    for i in range(length):
+        d[primes[i]] = mults[i]
+    return d
+
 def multiply_factorizations(a, b):
     cdef int p
     primes = set(a.keys()).union(set(b.keys()))
@@ -198,7 +229,10 @@ def count_divisors(d):  # d is factorization dictionary
     return reduce(lambda a,b: a*(b+1), d.values(), 1)
 
 def num_divisors(x):
-    return count_divisors(prime_factorize_big(x))
+    if x < 2**63:
+        return count_divisors(prime_factorize(x))
+    else:
+        return count_divisors(prime_factorize_big(x))
 
 def sum_divisors(int n): # Aka sigma(n)
     cdef int total, sqrt, i

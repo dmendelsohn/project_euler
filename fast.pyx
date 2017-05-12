@@ -401,3 +401,30 @@ def p95_helper():
                     answer = min(answer, chain[k])
     return answer        
     #return min(longest_chain), 'Minimum element in longest "sum of proper divisors" chain'
+
+cdef int p104_is_pandigital(int num):
+    cdef int agg = 0
+    while num > 0:
+        agg += (1<<(num%10))
+        num //= 10
+    return agg == (2**10-2)
+
+def p104_helper():
+    cdef int prev_fib = 1
+    cdef int fib = 1
+    cdef double phi = 0.5*(1+5**0.5)
+    cdef double phi_power = phi**2 / (5**0.5)
+    cdef int n = 2
+    while True:
+        if p104_is_pandigital(fib) and p104_is_pandigital(int(phi_power)):
+        #if p104_is_pandigital(fib):
+        #if p104_is_pandigital(int(phi_power)):
+            break
+        prev_fib, fib = fib, (prev_fib+fib)%(10**9)
+        phi_power *= phi
+        if phi_power >= 10**9:
+            phi_power /= 10
+        n += 1
+    return n
+
+
