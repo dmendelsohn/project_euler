@@ -262,7 +262,7 @@ def get_first_sigmas(int n, proper=False): # Returns [sigma(n) for i in range(n)
             sigmas[i] -= i
     return sigmas
 
-def is_prime(int x):
+def is_prime(long x):
     cdef int i, max_num
     if x <= 1:
         return False

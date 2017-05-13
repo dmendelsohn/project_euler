@@ -1,8 +1,4 @@
 TODO:
-Python 3-ify problems 87 and onward
-Improve with CPython: utils.py
-Improve with CPython: 23, 30, 34, 43, 44, 58, 59, 60, 72
-Replace tabs with 4 spaces
 
 Backburner:
 Combined packaging for partial fractions, a*sqrt(b) + c fraction class
