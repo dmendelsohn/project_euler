@@ -427,4 +427,21 @@ def p104_helper():
         n += 1
     return n
 
+def p112_is_bouncy(unsigned int num):
+    cdef int num_increases = 0
+    cdef int num_decreases = 0
+    cdef int digit, prev_digit
+    prev_digit = num%10
+    num //= 10
+    while num > 0:
+        digit = num%10
+        if digit > prev_digit:
+            num_increases += 1
+        elif digit < prev_digit:
+            num_decreases += 1
+        prev_digit = digit
+        num //= 10
+    return (num_increases > 0) and (num_decreases > 0)
+
+
 
