@@ -1,7 +1,8 @@
 import itertools
 import utils
 
-#TODO: description
+# Pandigital prime set is a set of numbers such that the numbers cumulatively have
+# each digit 1-9 exactly once, and each number is prime
 def compute(verbose=False):
     def get_num_sets(minimum, digits):
         n = len(digits)
