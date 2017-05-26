@@ -122,5 +122,7 @@ Problem 121: 2269
 Problem 122: 1582
 Problem 123: 21035
 Problem 124: 21417
+Problem 125: 2906969179
+Problem 126: 18522
 
 Problem 243: 892371480

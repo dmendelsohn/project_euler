@@ -443,5 +443,26 @@ def p112_is_bouncy(unsigned int num):
         num //= 10
     return (num_increases > 0) and (num_decreases > 0)
 
+def p126_helper(int limit=20000, int target=1000):
+  cdef int i,j,k,l,S,E,size
+  cdef int MAX_DIM = limit//4
+  cdef int[:] C = array.array('i',[0]*limit)
+  for i in range(1, MAX_DIM):
+    for j in range(i, MAX_DIM):
+      if (6*i*j >= limit):
+        break # Surface area already exceeds limit
+      for k in range(j, MAX_DIM):
+        S = 2*(i*j + i*k + j*k)
+        E = 4*(i+j+k)
+        size = S # First layer size
+        l = 1  # Layer counter
+        while size < limit:
+          C[size] += 1
+          l += 1
+          size += (E + 8*(l-2))
 
-
+  cdef int n
+  for n in range(1, limit):
+    if C[n] == target:
+      return n, 'Lowest number that is size of a layer of {} cuboids'.format(target)
+  return -1, 'No solution found below {}'.format(limit)
