@@ -17,7 +17,7 @@ cdef long isqrt(long n):  # Newton's method
         y = (x + n // x) >> 1
     return x
 
-cdef gcd(long a, long b):
+cdef long gcd(long a, long b):
     while b:
         a, b = b, a%b
     return a
@@ -466,3 +466,24 @@ def p126_helper(int limit=20000, int target=1000):
     if C[n] == target:
       return n, 'Lowest number that is size of a layer of {} cuboids'.format(target)
   return -1, 'No solution found below {}'.format(limit)
+
+def p127_get_total(ab, r, int MAX=120000):
+  cdef long[:] possible_ab = array.array('l', ab)
+  cdef long[:] rad = array.array('l', r)
+  cdef int ai, bi, a, b, c
+  cdef long rad_abc
+  cdef int total = 0
+  for ai in range(len(possible_ab)):
+    for bi in range(ai+1, len(possible_ab)):
+      a = possible_ab[ai]  # We aren't doing a<b, but (a,b) are unique
+      b = possible_ab[bi]
+      rad_abc = rad[a]*rad[b]
+      if rad_abc >= MAX//2:
+        break
+      c = a+b
+      if c < MAX:
+        rad_abc *= rad[c]
+        if rad_abc < c and gcd(a,b) == 1:
+          total += c
+  return total
+

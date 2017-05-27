@@ -124,5 +124,6 @@ Problem 123: 21035
 Problem 124: 21417
 Problem 125: 2906969179
 Problem 126: 18522
+Problem 127: 18407904
 
 Problem 243: 892371480
