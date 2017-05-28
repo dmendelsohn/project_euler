@@ -126,4 +126,6 @@ Problem 125: 2906969179
 Problem 126: 18522
 Problem 127: 18407904
 
+Problem 145: 608720
+
 Problem 243: 892371480
